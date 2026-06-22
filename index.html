@@ -525,6 +525,48 @@
     }
     .contact-form textarea { height: 120px; }
     .contact-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+
+    /* ─── SUCCESS MODAL ─── */
+    .modal-overlay {
+      position: fixed; inset: 0; z-index: 500;
+      background: rgba(13,13,13,.55);
+      backdrop-filter: blur(6px);
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+      opacity: 0; visibility: hidden;
+      transition: opacity .4s ease, visibility .4s ease;
+    }
+    .modal-overlay.open { opacity: 1; visibility: visible; }
+    .modal-card {
+      background: var(--surface); border-radius: 24px;
+      padding: 3rem 2.5rem; max-width: 440px; width: 100%;
+      text-align: center;
+      box-shadow: 0 32px 80px rgba(0,0,0,.16);
+      transform: scale(.92) translateY(16px);
+      transition: transform .45s cubic-bezier(.16,1,.3,1);
+    }
+    .modal-overlay.open .modal-card { transform: scale(1) translateY(0); }
+    .modal-icon {
+      width: 64px; height: 64px; border-radius: 50%;
+      background: var(--accent2);
+      display: flex; align-items: center; justify-content: center;
+      margin: 0 auto 1.75rem;
+    }
+    .modal-icon svg path { stroke: var(--accent); }
+    .modal-title {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 1.4rem; letter-spacing: -.03em;
+      color: var(--dark); margin-bottom: .75rem;
+    }
+    .modal-msg { color: var(--gray); font-size: .9rem; line-height: 1.75; margin-bottom: 2rem; }
+    .modal-close {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--dark); color: #fff;
+      font-family: 'Inter', sans-serif; font-size: .85rem; font-weight: 600;
+      padding: .85rem 2rem; border-radius: 100px; border: none; cursor: pointer;
+      transition: background .25s, transform .25s;
+    }
+    .modal-close:hover { background: var(--accent); transform: translateY(-2px); }
     .btn-whatsapp {
       display: inline-flex; align-items: center; gap: .6rem;
       background: #25d366; color: #fff; text-decoration: none;
@@ -718,12 +760,7 @@
   <section class="featured-section">
     <div class="featured-inner">
       <a href="https://www.behance.net/gallery/232492937/Manual-Munatika-Artesanias" target="_blank" rel="noopener" class="featured-visual rl" style="display:block;">
-        <div class="fv-inner">
-          <div style="width:72px;height:72px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;">
-            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
-          </div>
-          <span style="font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,.2);">Proyecto destacado</span>
-        </div>
+        <img src="asset/featured-munatika.png" alt="Munatika Artesanías — Proyecto destacado" style="width:100%;height:100%;object-fit:cover;display:block;" />
         <span class="fv-pill">Manual de Marca</span>
         <span class="fv-year">2024</span>
       </a>
@@ -788,10 +825,9 @@
       <div class="carousel-track" id="track">
 
         <a href="https://www.behance.net/gallery/232492937/Manual-Munatika-Artesanias" target="_blank" rel="noopener" class="carousel-card">
-          <div class="card-thumb"><div class="ph card-ph-1">
-            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-            <span class="ph-tag">Manual de Marca</span>
-          </div></div>
+          <div class="card-thumb">
+            <img src="asset/munatika.png" alt="Munatika Artesanías" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="card-body">
             <div><h3>Munatika Artesanías</h3><span class="card-meta">Identidad Visual · Manual de Marca</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -799,10 +835,9 @@
         </a>
 
         <a href="https://www.behance.net/gallery/182046833/Vidagift-uxui" target="_blank" rel="noopener" class="carousel-card">
-          <div class="card-thumb"><div class="ph card-ph-2">
-            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
-            <span class="ph-tag">UX / UI Design</span>
-          </div></div>
+          <div class="card-thumb">
+            <img src="asset/vidagift.png" alt="Vidagift UX/UI" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="card-body">
             <div><h3>Vidagift — UX/UI</h3><span class="card-meta">Diseño de Interfaz · Digital</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -810,10 +845,9 @@
         </a>
 
         <a href="https://www.behance.net/gallery/177656503/Creacion-de-Personaje" target="_blank" rel="noopener" class="carousel-card">
-          <div class="card-thumb"><div class="ph card-ph-4">
-            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
-            <span class="ph-tag">Character Design</span>
-          </div></div>
+          <div class="card-thumb">
+            <img src="asset/personaje.png" alt="Creación de Personaje" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="card-body">
             <div><h3>Creación de Personaje</h3><span class="card-meta">Ilustración · Character Design</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -821,10 +855,9 @@
         </a>
 
         <a href="https://www.behance.net/gallery/176423883/Manual-Rodmartt-Services" target="_blank" rel="noopener" class="carousel-card">
-          <div class="card-thumb"><div class="ph card-ph-5">
-            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
-            <span class="ph-tag">Manual de Marca</span>
-          </div></div>
+          <div class="card-thumb">
+            <img src="asset/rodmartt.png" alt="Rodmartt Services" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="card-body">
             <div><h3>Rodmartt Services</h3><span class="card-meta">Identidad Visual · Manual de Marca</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -832,10 +865,9 @@
         </a>
 
         <a href="https://www.behance.net/gallery/204427213/Procaterme" target="_blank" rel="noopener" class="carousel-card">
-          <div class="card-thumb"><div class="ph card-ph-6">
-            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v6M15 3v6"/></svg></div>
-            <span class="ph-tag">Identidad Visual</span>
-          </div></div>
+          <div class="card-thumb">
+            <img src="asset/procaterme.png" alt="Procaterme" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="card-body">
             <div><h3>Procaterme</h3><span class="card-meta">Identidad Visual · Branding</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -843,10 +875,9 @@
         </a>
 
         <a href="https://www.behance.net/gallery/178284807/Independencia-y-Unidad-Colegio-de-abogados" target="_blank" rel="noopener" class="carousel-card">
-          <div class="card-thumb"><div class="ph card-ph-7">
-            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><path d="M12 3L3 8v1h18V8L12 3zM5 10v7M9 10v7M15 10v7M19 10v7M3 19h18"/></svg></div>
-            <span class="ph-tag">Editorial</span>
-          </div></div>
+          <div class="card-thumb">
+            <img src="asset/independencia.png" alt="Independencia y Unidad" style="width:100%;height:100%;object-fit:cover;display:block;" />
+          </div>
           <div class="card-body">
             <div><h3>Independencia y Unidad</h3><span class="card-meta">Diseño Editorial · Institucional</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
@@ -974,7 +1005,7 @@
       <h2 class="s-title">¿Tienes un proyecto <em>en mente</em>?</h2>
       <p>Cuéntame tu idea. Estoy disponible para proyectos freelance y colaboraciones desde Jujuy, Argentina, para todo el mundo.</p>
 
-      <form class="contact-form" action="https://api.web3forms.com/submit" method="POST">
+      <form class="contact-form" id="contact-form">
         <input type="hidden" name="access_key" value="2574f1c5-a55c-43a4-b73a-7b5637b5d111">
         <div class="form-row">
           <input type="text"  id="fc-name"    name="name"    placeholder="Tu nombre"          required />
@@ -994,6 +1025,20 @@
       </div>
     </div>
   </section>
+
+  <!-- ─── SUCCESS MODAL ─── -->
+  <div class="modal-overlay" id="success-modal" role="dialog" aria-modal="true">
+    <div class="modal-card">
+      <div class="modal-icon">
+        <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M20 6L9 17l-5-5"/>
+        </svg>
+      </div>
+      <p class="modal-title">¡Mensaje enviado!</p>
+      <p class="modal-msg">Gracias por escribirme. Tu mensaje llegó con éxito.<br>Me pondré en contacto a la brevedad.</p>
+      <button class="modal-close" onclick="closeModal()">Cerrar ✕</button>
+    </div>
+  </div>
 
   <!-- ─── FOOTER ─── -->
   <footer>
@@ -1089,16 +1134,42 @@
     });
     window.addEventListener('resize', () => goTo(current));
 
-    /* ── CONTACT FORM ── */
-    function sendForm(e) {
+    /* ── CONTACT FORM (Web3Forms + Fetch) ── */
+    const contactForm = document.getElementById('contact-form');
+    const submitBtn   = contactForm.querySelector('button[type="submit"]');
+
+    contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-      const name    = document.getElementById('fc-name').value.trim();
-      const email   = document.getElementById('fc-email').value.trim();
-      const subject = document.getElementById('fc-subject').value.trim();
-      const msg     = document.getElementById('fc-msg').value.trim();
-      const body    = `Hola Damian,%0ANombre: ${name}%0AEmail: ${email}%0AAsunto: ${subject}%0A%0A${msg}`;
-      window.location.href = `mailto:damianruedadg@gmail.com?subject=${encodeURIComponent(subject || 'Proyecto desde Damdesign')}&body=${body}`;
+
+      submitBtn.textContent = 'Enviando...';
+      submitBtn.disabled = true;
+
+      const data = new FormData(contactForm);
+
+      try {
+        const res    = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
+        const result = await res.json();
+
+        if (result.success) {
+          contactForm.reset();
+          document.getElementById('success-modal').classList.add('open');
+        } else {
+          alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+        }
+      } catch {
+        alert('Sin conexión. Revisá tu internet e intentá de nuevo.');
+      } finally {
+        submitBtn.textContent = 'Enviar mensaje →';
+        submitBtn.disabled = false;
+      }
+    });
+
+    function closeModal() {
+      document.getElementById('success-modal').classList.remove('open');
     }
+    document.getElementById('success-modal').addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) closeModal();
+    });
 
     /* ── SCROLL REVEAL ── */
     const obs = new IntersectionObserver(entries => {
