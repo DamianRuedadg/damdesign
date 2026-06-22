@@ -1,0 +1,1110 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Damdesign — Diego Damian · Diseño Gráfico · Jujuy</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --bg:      #f2f1ed;
+      --surface: #ffffff;
+      --dark:    #0d0d0d;
+      --gray:    #888;
+      --border:  rgba(0,0,0,0.08);
+      --accent:  #e8572a;
+      --accent2: #fff2ee;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: 'Inter', sans-serif;
+      background: var(--bg);
+      color: var(--dark);
+      overflow-x: hidden;
+    }
+
+    /* ─── CURSOR ─── */
+    #cur, #cur-f {
+      position: fixed;
+      border-radius: 50%;
+      pointer-events: none;
+      z-index: 9999;
+      transform: translate(-50%, -50%);
+    }
+    #cur {
+      width: 8px; height: 8px;
+      background: var(--accent);
+      transition: width .25s, height .25s;
+    }
+    #cur-f {
+      z-index: 9998;
+      width: 40px; height: 40px;
+      border: 1.5px solid rgba(232,87,42,.35);
+      transition: width .3s, height .3s, border-color .3s;
+    }
+    body.ch #cur { width: 14px; height: 14px; }
+    body.ch #cur-f { width: 56px; height: 56px; border-color: rgba(232,87,42,.6); }
+    @media (hover: none) { #cur, #cur-f { display: none; } }
+
+    /* ─── REVEAL ─── */
+    .reveal {
+      opacity: 0; transform: translateY(28px);
+      transition: opacity .7s ease, transform .7s ease;
+    }
+    .reveal.v { opacity: 1; transform: none; }
+    .rl { opacity: 0; transform: translateX(-32px); transition: opacity .7s ease, transform .7s ease; }
+    .rl.v { opacity: 1; transform: none; }
+    .rr { opacity: 0; transform: translateX(32px);  transition: opacity .7s ease, transform .7s ease; }
+    .rr.v { opacity: 1; transform: none; }
+
+    /* ─── NAV ─── */
+    nav {
+      position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+      display: flex; justify-content: space-between; align-items: center;
+      padding: 1.25rem 4rem;
+      transition: background .3s, box-shadow .3s;
+    }
+    nav.scrolled {
+      background: rgba(242,241,237,.92);
+      backdrop-filter: blur(14px);
+      box-shadow: 0 1px 0 var(--border);
+    }
+    .logo {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 1.25rem; letter-spacing: -.01em;
+      color: var(--dark); text-decoration: none; z-index: 301;
+    }
+    .logo span { color: var(--accent); }
+    nav ul { list-style: none; display: flex; gap: 2.5rem; }
+    nav ul a {
+      color: var(--gray); text-decoration: none;
+      font-size: .82rem; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase;
+      transition: color .2s;
+    }
+    nav ul a:hover { color: var(--dark); }
+    .nav-cta {
+      background: var(--dark); color: #fff !important;
+      padding: .5rem 1.25rem; border-radius: 100px;
+    }
+    .nav-cta:hover { background: var(--accent) !important; }
+
+    /* hamburger */
+    .hbg {
+      display: none; flex-direction: column; gap: 5px;
+      background: none; border: none; cursor: pointer; padding: 4px; z-index: 301;
+    }
+    .hbg span {
+      display: block; width: 24px; height: 2px;
+      background: var(--dark); border-radius: 2px;
+      transition: transform .3s, opacity .3s;
+    }
+    .hbg.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
+    .hbg.open span:nth-child(2) { opacity: 0; }
+    .hbg.open span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
+
+    /* mobile overlay */
+    .mob-menu {
+      position: fixed; inset: 0; background: var(--bg); z-index: 300;
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem; opacity: 0; visibility: hidden;
+      transition: opacity .4s, visibility .4s;
+    }
+    .mob-menu.open { opacity: 1; visibility: visible; }
+    .mob-menu a {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 2rem; color: var(--dark); text-decoration: none;
+      letter-spacing: -.02em; transition: color .2s;
+    }
+    .mob-menu a:hover { color: var(--accent); }
+    .mob-social { display: flex; gap: 2rem; margin-top: 1rem; }
+    .mob-social a {
+      font-size: .75rem; font-weight: 500;
+      letter-spacing: .1em; text-transform: uppercase;
+      color: var(--gray); text-decoration: none;
+    }
+
+    /* ─── HERO ─── */
+    .hero {
+      min-height: 100vh; display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      padding: 8rem 4rem 5rem;
+      position: relative; overflow: hidden;
+      background: var(--bg); text-align: center;
+    }
+    .hero-deco {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 75vw; height: 75vw; max-width: 900px; max-height: 900px;
+      border-radius: 50%;
+      background: radial-gradient(circle,rgba(232,87,42,.1) 0%,transparent 65%);
+      pointer-events: none; animation: pulse 7s ease-in-out infinite;
+    }
+    .hero-deco-ring {
+      position: absolute; top: 50%; left: 50%;
+      transform: translate(-50%,-50%);
+      width: 42vw; height: 42vw; max-width: 560px; max-height: 560px;
+      border-radius: 50%; border: 1px solid rgba(232,87,42,.12);
+      pointer-events: none; animation: pulse 7s ease-in-out infinite reverse;
+    }
+    @keyframes pulse {
+      0%,100% { transform: translate(-50%,-50%) scale(1); opacity: 1; }
+      50%      { transform: translate(-50%,-50%) scale(1.05); opacity: .6; }
+    }
+    .hero-badge {
+      display: inline-flex; align-items: center; gap: .5rem;
+      background: var(--surface); border: 1px solid var(--border);
+      padding: .45rem 1rem; border-radius: 100px;
+      font-size: .75rem; font-weight: 500; color: var(--gray);
+      margin-bottom: 2.5rem;
+      animation: fadeDown .8s cubic-bezier(.16,1,.3,1) both;
+    }
+    .hero-badge .dot {
+      width: 7px; height: 7px; background: #3ecf8e; border-radius: 50%;
+      animation: blink 2s ease-in-out infinite;
+    }
+    @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
+    @keyframes fadeDown {
+      from { opacity:0; transform:translateY(-16px); }
+      to   { opacity:1; transform:none; }
+    }
+    .hero h1 {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: clamp(3.8rem,10vw,9.5rem);
+      line-height: .92; letter-spacing: -.04em;
+      max-width: 14ch; margin-bottom: 2rem;
+    }
+    .hero h1 .line { display: block; overflow: hidden; }
+    .hero h1 .line span {
+      display: block;
+      animation: slideUp .9s cubic-bezier(.16,1,.3,1) both;
+    }
+    .hero h1 .line:nth-child(2) span { animation-delay: .12s; }
+    @keyframes slideUp {
+      from { transform: translateY(110%); opacity: 0; }
+      to   { transform: translateY(0);    opacity: 1; }
+    }
+    .hero h1 em { font-style: normal; color: var(--accent); }
+    .hero-bottom { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
+    .hero p {
+      color: var(--gray); font-size: 1.05rem; max-width: 46ch;
+      line-height: 1.75;
+      animation: fadeUp 1s .35s cubic-bezier(.16,1,.3,1) both;
+    }
+    @keyframes fadeUp {
+      from { opacity:0; transform:translateY(20px); }
+      to   { opacity:1; transform:none; }
+    }
+    .hero-actions {
+      display: flex; gap: 1rem; align-items: center;
+      animation: fadeUp 1s .5s cubic-bezier(.16,1,.3,1) both;
+    }
+
+    /* buttons */
+    .btn-primary {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: var(--dark); color: #fff; text-decoration: none;
+      font-size: .85rem; font-weight: 600;
+      padding: .9rem 1.8rem; border-radius: 100px;
+      transition: background .25s, transform .25s, box-shadow .25s;
+    }
+    .btn-primary:hover { background: var(--accent); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(232,87,42,.35); }
+    .btn-outline {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: transparent; color: var(--dark); text-decoration: none;
+      font-size: .85rem; font-weight: 500;
+      padding: .9rem 1.8rem; border-radius: 100px;
+      border: 1.5px solid rgba(0,0,0,.15);
+      transition: border-color .2s, transform .2s, box-shadow .2s;
+    }
+    .btn-outline:hover { border-color: var(--dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.08); }
+
+    /* ─── TICKER ─── */
+    .ticker {
+      background: var(--dark); color: #fff;
+      overflow: hidden; padding: 1rem 0;
+      border-top: 1px solid rgba(255,255,255,.05);
+    }
+    .ticker-track {
+      display: flex; animation: ticker 22s linear infinite; width: max-content;
+    }
+    .ticker-track span {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: .82rem; letter-spacing: .08em; text-transform: uppercase;
+      padding: 0 2.5rem; white-space: nowrap;
+    }
+    .ticker-track span.sep { color: var(--accent); }
+    @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
+
+    /* ─── FEATURED WORK ─── */
+    .featured-section {
+      padding: 7rem 4rem;
+      border-bottom: 1px solid var(--border);
+    }
+    .featured-inner {
+      display: grid; grid-template-columns: 1fr 1fr;
+      gap: 5rem; align-items: center;
+    }
+    .featured-visual {
+      aspect-ratio: 4/3; border-radius: 20px;
+      overflow: hidden;
+      background: linear-gradient(135deg,#ede9e0,#e0dbd0);
+      position: relative;
+    }
+    .fv-inner {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: 1rem;
+      transition: transform .6s ease;
+    }
+    .featured-visual:hover .fv-inner { transform: scale(1.03); }
+    .fv-pill {
+      position: absolute; top: 1.5rem; left: 1.5rem;
+      background: rgba(255,255,255,.9); backdrop-filter: blur(8px);
+      padding: .4rem .9rem; border-radius: 100px;
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .1em; text-transform: uppercase; color: var(--dark);
+    }
+    .fv-year {
+      position: absolute; bottom: 1.5rem; right: 1.5rem;
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: .9rem; color: rgba(0,0,0,.2);
+    }
+    .featured-content h2 {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: clamp(2rem,3.5vw,3rem);
+      letter-spacing: -.03em; line-height: 1.05; margin-bottom: 1.5rem;
+    }
+    .featured-content p {
+      color: var(--gray); font-size: .95rem; line-height: 1.85;
+      margin-bottom: 2.5rem; max-width: 44ch;
+    }
+    .f-tags { display: flex; flex-wrap: wrap; gap: .5rem; margin-bottom: 2.5rem; }
+    .f-tag {
+      padding: .35rem .85rem; border-radius: 100px;
+      border: 1.5px solid var(--border);
+      font-size: .72rem; font-weight: 500; color: var(--gray);
+    }
+
+    /* ─── STATS ─── */
+    .stats {
+      display: grid; grid-template-columns: repeat(4,1fr);
+      border-bottom: 1px solid var(--border);
+    }
+    .stat { padding: 3rem 2.5rem; border-right: 1px solid var(--border); }
+    .stat:last-child { border-right: none; }
+    .stat-num {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: clamp(2.2rem,4vw,3.5rem);
+      letter-spacing: -.04em; color: var(--dark);
+      display: block; margin-bottom: .4rem;
+    }
+    .stat-num .accent { color: var(--accent); }
+    .stat-label {
+      font-size: .78rem; color: var(--gray); font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase;
+    }
+
+    /* ─── SECTION LABEL / TITLE ─── */
+    .section-wrap { padding: 6rem 4rem; }
+    .s-label {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .72rem; font-weight: 600;
+      letter-spacing: .15em; text-transform: uppercase; color: var(--accent);
+      margin-bottom: 1rem;
+    }
+    .s-label::before { content:''; display:block; width:20px; height:2px; background:var(--accent); }
+    .s-title {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: clamp(2rem,4vw,3.5rem);
+      letter-spacing: -.03em; line-height: 1.05;
+    }
+
+    /* ─── CAROUSEL ─── */
+    .carousel-section { padding: 6rem 0; }
+    .carousel-header {
+      display: flex; justify-content: space-between; align-items: flex-end;
+      padding: 0 4rem; margin-bottom: 3rem;
+    }
+    .carousel-controls { display: flex; align-items: center; gap: 1rem; }
+    .carousel-btn {
+      width: 48px; height: 48px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: var(--surface);
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      transition: background .2s, border-color .2s, transform .2s;
+    }
+    .carousel-btn:hover { background: var(--dark); border-color: var(--dark); transform: scale(1.05); }
+    .carousel-btn:hover svg path { stroke: #fff; }
+    .carousel-btn svg { pointer-events: none; }
+    .carousel-btn svg path { transition: stroke .2s; }
+    .behance-link {
+      display: inline-flex; align-items: center; gap: .5rem;
+      font-size: .82rem; font-weight: 600; color: var(--dark);
+      text-decoration: none; border-bottom: 1.5px solid var(--dark);
+      padding-bottom: 2px; transition: color .2s, border-color .2s;
+    }
+    .behance-link:hover { color: var(--accent); border-color: var(--accent); }
+    .carousel-viewport { overflow: hidden; padding: 0 4rem; }
+    .carousel-track {
+      display: flex; gap: 1.5rem;
+      transition: transform .6s cubic-bezier(.25,.46,.45,.94);
+      will-change: transform;
+    }
+    .carousel-card {
+      flex: 0 0 calc(50% - .75rem);
+      background: var(--surface); border-radius: 16px;
+      overflow: hidden; cursor: pointer;
+      transition: transform .35s, box-shadow .35s;
+      text-decoration: none; color: inherit;
+    }
+    .carousel-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.1); }
+    .card-thumb { width: 100%; aspect-ratio: 16/9; position: relative; overflow: hidden; }
+    .card-thumb .ph {
+      width: 100%; height: 100%;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center; gap: .75rem;
+      transition: transform .5s ease;
+    }
+    .carousel-card:hover .ph { transform: scale(1.04); }
+    .ph-circle {
+      width: 52px; height: 52px; border-radius: 50%;
+      background: rgba(0,0,0,.06);
+      display: flex; align-items: center; justify-content: center;
+    }
+    .ph-circle svg { opacity: .3; }
+    .ph-tag {
+      font-size: .68rem; font-weight: 600;
+      letter-spacing: .14em; text-transform: uppercase; color: rgba(0,0,0,.25);
+    }
+    .card-ph-1 { background: linear-gradient(135deg,#ede9e0,#e0dbd0); }
+    .card-ph-2 { background: linear-gradient(135deg,#dfe6ed,#d0dde8); }
+    .card-ph-4 { background: linear-gradient(135deg,#e0ede4,#d0e8d8); }
+    .card-ph-5 { background: linear-gradient(135deg,#edece0,#e8e6d0); }
+    .card-ph-6 { background: linear-gradient(135deg,#e0ede8,#d0e8dc); }
+    .card-ph-7 { background: linear-gradient(135deg,#e8e0d5,#ddd0c8); }
+    .card-body {
+      padding: 1.5rem 1.75rem 1.75rem;
+      display: flex; justify-content: space-between; align-items: flex-end; gap: 1rem;
+    }
+    .card-body h3 {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 1.05rem; letter-spacing: -.01em; margin-bottom: .4rem;
+    }
+    .card-meta { font-size: .75rem; font-weight: 500; color: var(--gray); letter-spacing: .05em; }
+    .card-arrow {
+      width: 36px; height: 36px; border-radius: 50%;
+      background: var(--bg); border: none;
+      display: flex; align-items: center; justify-content: center; flex-shrink: 0;
+      transition: background .2s, transform .2s;
+    }
+    .carousel-card:hover .card-arrow { background: var(--accent); transform: rotate(45deg); }
+    .carousel-card:hover .card-arrow svg path { stroke: #fff; }
+    .cdots { display: flex; gap: .5rem; justify-content: center; margin-top: 2.5rem; }
+    .cdot {
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--border); border: 1.5px solid rgba(0,0,0,.15);
+      cursor: pointer; transition: background .2s, width .3s;
+    }
+    .cdot.active { background: var(--dark); width: 22px; border-radius: 3px; border-color: var(--dark); }
+
+    /* ─── ABOUT ─── */
+    .about-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+    .about-img-wrap { position: relative; }
+    .about-img { aspect-ratio: 4/5; border-radius: 20px; overflow: hidden; background: #e4e2db; }
+    .about-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
+    .about-badge {
+      position: absolute; bottom: 1.5rem; right: -1.5rem;
+      background: var(--surface); border-radius: 14px;
+      padding: 1.1rem 1.35rem;
+      box-shadow: 0 8px 32px rgba(0,0,0,.1); font-size: .8rem;
+    }
+    .about-badge strong {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 1.5rem; display: block; color: var(--accent); letter-spacing: -.03em;
+    }
+    .about-text .s-title { margin-bottom: 1.5rem; }
+    .about-text p { color: var(--gray); line-height: 1.85; margin-bottom: 1.2rem; font-size: .95rem; }
+    .skills { display: flex; flex-wrap: wrap; gap: .5rem; margin-top: 2rem; }
+    .skill-tag {
+      background: var(--surface); border: 1.5px solid var(--border);
+      padding: .45rem 1rem; border-radius: 100px;
+      font-size: .75rem; font-weight: 500; color: var(--dark);
+      letter-spacing: .04em; cursor: default;
+      transition: background .2s, border-color .2s, color .2s, transform .2s;
+    }
+    .skill-tag:hover { background: var(--accent); border-color: var(--accent); color: #fff; transform: translateY(-2px); }
+
+    /* ─── SERVICES ─── */
+    .services-bg { background: var(--bg); }
+    .services-grid { display: grid; grid-template-columns: repeat(3,1fr); gap: 1.5rem; margin-top: 4rem; }
+    .service-card {
+      background: var(--surface); border: 1.5px solid var(--border);
+      border-radius: 20px; padding: 2.5rem;
+      transition: border-color .3s, transform .3s, box-shadow .3s;
+    }
+    .service-card:hover { border-color: var(--accent); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(232,87,42,.1); }
+    .service-num {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: .72rem; letter-spacing: .1em; color: var(--accent);
+      margin-bottom: 1.5rem; display: block;
+    }
+    .service-icon {
+      width: 48px; height: 48px; border-radius: 12px;
+      background: var(--accent2);
+      display: flex; align-items: center; justify-content: center;
+      margin-bottom: 1.75rem; transition: background .3s;
+    }
+    .service-card:hover .service-icon { background: var(--accent); }
+    .service-icon svg path, .service-icon svg rect,
+    .service-icon svg circle, .service-icon svg line { stroke: var(--accent); transition: stroke .3s; }
+    .service-card:hover .service-icon svg path,
+    .service-card:hover .service-icon svg rect,
+    .service-card:hover .service-icon svg circle,
+    .service-card:hover .service-icon svg line { stroke: #fff; }
+    .service-card h3 {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 1.1rem; margin-bottom: 1rem; color: var(--dark);
+    }
+    .service-card p { color: var(--gray); font-size: .88rem; line-height: 1.85; }
+
+    /* ─── PROCESS ─── */
+    .process-section { padding: 6rem 4rem; border-top: 1px solid var(--border); }
+    .process-header { margin-bottom: 4rem; }
+    .process-grid { display: grid; grid-template-columns: repeat(4,1fr); }
+    .process-step {
+      padding: 2.5rem 2rem; border-right: 1px solid var(--border);
+      position: relative; transition: background .3s;
+    }
+    .process-step:last-child { border-right: none; }
+    .process-step::before {
+      content: ''; position: absolute; top: 0; left: 2rem; right: 2rem;
+      height: 2px; background: transparent; transition: background .3s;
+    }
+    .process-step:hover::before { background: var(--accent); }
+    .process-num {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 3rem; letter-spacing: -.04em;
+      color: rgba(0,0,0,.06); display: block;
+      margin-bottom: .5rem; line-height: 1;
+      transition: color .3s;
+    }
+    .process-step:hover .process-num { color: rgba(232,87,42,.12); }
+    .process-step h3 {
+      font-family: 'Manrope', sans-serif; font-weight: 700;
+      font-size: 1rem; margin-bottom: .75rem; color: var(--dark);
+    }
+    .process-step p { color: var(--gray); font-size: .85rem; line-height: 1.75; }
+
+    /* ─── CONTACT ─── */
+    .contact-wrap { text-align: center; padding: 8rem 4rem; }
+    .contact-wrap .s-label { justify-content: center; }
+    .contact-wrap .s-title { margin-bottom: 1.5rem; font-size: clamp(2.5rem,6vw,5rem); }
+    .contact-wrap .s-title em { font-style: normal; color: var(--accent); }
+    .contact-wrap > p { color: var(--gray); max-width: 44ch; margin: 0 auto 3rem; line-height: 1.75; }
+    .contact-form {
+      max-width: 560px; margin: 0 auto 2.5rem;
+      display: flex; flex-direction: column; gap: 1rem; text-align: left;
+    }
+    .form-row { display: grid; grid-template-columns: 1fr 1fr; gap: 1rem; }
+    .contact-form input, .contact-form textarea {
+      width: 100%; background: var(--surface);
+      border: 1.5px solid var(--border); border-radius: 12px;
+      padding: .9rem 1.1rem;
+      font-family: 'Inter', sans-serif; font-size: .88rem; color: var(--dark);
+      outline: none; transition: border-color .2s, box-shadow .2s; resize: none;
+    }
+    .contact-form input::placeholder, .contact-form textarea::placeholder { color: #bbb; }
+    .contact-form input:focus, .contact-form textarea:focus {
+      border-color: var(--accent); box-shadow: 0 0 0 3px rgba(232,87,42,.08);
+    }
+    .contact-form textarea { height: 120px; }
+    .contact-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+    .btn-whatsapp {
+      display: inline-flex; align-items: center; gap: .6rem;
+      background: #25d366; color: #fff; text-decoration: none;
+      font-size: .85rem; font-weight: 600;
+      padding: .9rem 1.8rem; border-radius: 100px;
+      transition: opacity .2s, transform .2s, box-shadow .2s;
+    }
+    .btn-whatsapp:hover { opacity: .9; transform: translateY(-2px); box-shadow: 0 8px 24px rgba(37,211,102,.35); }
+
+    /* ─── FOOTER ─── */
+    footer {
+      padding: 2rem 4rem; border-top: 1px solid var(--border);
+      display: flex; justify-content: space-between; align-items: center;
+      background: var(--surface);
+    }
+    footer p { color: var(--gray); font-size: .78rem; }
+    .social-links { display: flex; gap: 1.5rem; }
+    .social-links a {
+      color: var(--gray); text-decoration: none;
+      font-size: .78rem; font-weight: 500;
+      letter-spacing: .06em; text-transform: uppercase; transition: color .2s;
+    }
+    .social-links a:hover { color: var(--accent); }
+
+    /* ─── LOADER ─── */
+    #loader {
+      position: fixed; inset: 0; z-index: 999; background: var(--bg);
+      display: flex; flex-direction: column; align-items: center; justify-content: center;
+      gap: 2.5rem; transition: opacity .6s ease, visibility .6s ease;
+    }
+    #loader.hide { opacity: 0; visibility: hidden; }
+    .loader-logo {
+      font-family: 'Manrope', sans-serif; font-weight: 800;
+      font-size: 2rem; letter-spacing: -.03em; color: var(--dark);
+      animation: loaderFade .5s ease both;
+    }
+    .loader-logo span { color: var(--accent); }
+    @keyframes loaderFade {
+      from { opacity:0; transform:translateY(10px); }
+      to   { opacity:1; transform:none; }
+    }
+    .loader-bar-wrap { width: 160px; height: 2px; background: rgba(0,0,0,.08); border-radius: 2px; overflow: hidden; }
+    .loader-bar {
+      height: 100%; width: 0%; background: var(--accent); border-radius: 2px;
+      animation: loadBar 1.6s cubic-bezier(.4,0,.2,1) forwards;
+    }
+    @keyframes loadBar { 0%{width:0%} 40%{width:55%} 70%{width:80%} 100%{width:100%} }
+    .loader-label {
+      font-size: .7rem; font-weight: 600; letter-spacing: .18em;
+      text-transform: uppercase; color: var(--gray);
+      animation: loaderFade .5s .2s ease both;
+    }
+    body.loading { overflow: hidden; }
+
+    /* ─── RESPONSIVE ─── */
+    @media (max-width: 960px) {
+      nav { padding: 1rem 1.5rem; }
+      nav ul { display: none; }
+      .hbg { display: flex; }
+
+      .hero { padding: 7rem 1.5rem 5rem; }
+      .hero p { max-width: 100%; }
+      .hero-actions { flex-direction: column; width: 100%; }
+      .hero-actions a { justify-content: center; }
+
+      .featured-section { padding: 4rem 1.5rem; }
+      .featured-inner { grid-template-columns: 1fr; gap: 3rem; }
+
+      .stats { grid-template-columns: repeat(2,1fr); }
+      .stat:nth-child(2) { border-right: none; }
+
+      .carousel-section { padding: 4rem 0; }
+      .carousel-header { padding: 0 1.5rem; flex-direction: column; align-items: flex-start; gap: 1.5rem; }
+      .carousel-viewport { padding: 0 1.5rem; }
+      .carousel-card { flex: 0 0 80vw; }
+
+      .section-wrap { padding: 4rem 1.5rem; }
+      .about-grid { grid-template-columns: 1fr; }
+      .about-badge { right: 1rem; }
+      .services-grid { grid-template-columns: 1fr; }
+
+      .process-section { padding: 4rem 1.5rem; }
+      .process-grid { grid-template-columns: 1fr 1fr; }
+      .process-step:nth-child(2) { border-right: none; }
+      .process-step:nth-child(3),
+      .process-step:nth-child(4) { border-top: 1px solid var(--border); }
+
+      .contact-wrap { padding: 5rem 1.5rem; }
+      .contact-actions { flex-direction: column; align-items: center; }
+      .form-row { grid-template-columns: 1fr; }
+
+      footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+    }
+    @media (max-width: 480px) {
+      .process-grid { grid-template-columns: 1fr; }
+      .process-step { border-right: none; border-top: 1px solid var(--border); }
+      .process-step:first-child { border-top: none; }
+    }
+  </style>
+</head>
+<body class="loading">
+
+  <!-- ─── CURSOR ─── -->
+  <div id="cur"></div>
+  <div id="cur-f"></div>
+
+  <!-- ─── LOADER ─── -->
+  <div id="loader">
+    <div class="loader-logo">Dam<span>design</span></div>
+    <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
+    <span class="loader-label">Cargando portafolio</span>
+  </div>
+
+  <!-- ─── MOBILE MENU ─── -->
+  <div class="mob-menu" id="mob-menu">
+    <a href="#work"     onclick="closeMenu()">Trabajo</a>
+    <a href="#about"    onclick="closeMenu()">Sobre mí</a>
+    <a href="#services" onclick="closeMenu()">Servicios</a>
+    <a href="#process"  onclick="closeMenu()">Proceso</a>
+    <a href="#contact"  onclick="closeMenu()" style="color:var(--accent)">Contacto</a>
+    <div class="mob-social">
+      <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener">Behance</a>
+      <a href="https://www.instagram.com/damian.dmr" target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/diego-damian-mamani-rueda" target="_blank" rel="noopener">LinkedIn</a>
+    </div>
+  </div>
+
+  <!-- ─── NAV ─── -->
+  <nav id="navbar">
+    <a href="#" class="logo">Dam<span>design</span></a>
+    <ul>
+      <li><a href="#work">Trabajo</a></li>
+      <li><a href="#about">Sobre mí</a></li>
+      <li><a href="#services">Servicios</a></li>
+      <li><a href="#process">Proceso</a></li>
+      <li><a href="#contact" class="nav-cta">Contacto</a></li>
+    </ul>
+    <button class="hbg" id="hbg" aria-label="Menú">
+      <span></span><span></span><span></span>
+    </button>
+  </nav>
+
+  <!-- ─── HERO ─── -->
+  <section class="hero">
+    <div class="hero-deco"></div>
+    <div class="hero-deco-ring"></div>
+    <div class="hero-badge">
+      <span class="dot"></span>
+      Disponible para proyectos freelance · Jujuy, Argentina
+    </div>
+    <h1>
+      <span class="line"><span>Diseño que <em>habla</em></span></span>
+      <span class="line"><span>antes de que leas.</span></span>
+    </h1>
+    <div class="hero-bottom">
+      <p>Soy Diego Damian, diseñador gráfico de Jujuy, Argentina.<br>Creo identidades de marca, interfaces UX/UI e ilustraciones<br>que conectan con las personas y hacen que tu marca sea imposible de ignorar.</p>
+      <div class="hero-actions">
+        <a href="#work" class="btn-primary">Ver portafolio ↓</a>
+        <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener" class="btn-outline">Behance ↗</a>
+      </div>
+    </div>
+    <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;animation:fadeUp 1s .7s both;">
+      <span style="font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);">Scroll</span>
+      <div style="width:1px;height:40px;background:linear-gradient(to bottom,var(--gray),transparent);"></div>
+    </div>
+  </section>
+
+  <!-- ─── TICKER ─── -->
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-track">
+      <span>Diseño Gráfico</span><span class="sep">✦</span>
+      <span>Branding</span><span class="sep">✦</span>
+      <span>Identidad Visual</span><span class="sep">✦</span>
+      <span>UX / UI</span><span class="sep">✦</span>
+      <span>Ilustración</span><span class="sep">✦</span>
+      <span>Manuales de Marca</span><span class="sep">✦</span>
+      <span>Character Design</span><span class="sep">✦</span>
+      <span>Adobe Suite</span><span class="sep">✦</span>
+      <span>Diseño Gráfico</span><span class="sep">✦</span>
+      <span>Branding</span><span class="sep">✦</span>
+      <span>Identidad Visual</span><span class="sep">✦</span>
+      <span>UX / UI</span><span class="sep">✦</span>
+      <span>Ilustración</span><span class="sep">✦</span>
+      <span>Manuales de Marca</span><span class="sep">✦</span>
+      <span>Character Design</span><span class="sep">✦</span>
+      <span>Adobe Suite</span><span class="sep">✦</span>
+    </div>
+  </div>
+
+  <!-- ─── FEATURED WORK ─── -->
+  <section class="featured-section">
+    <div class="featured-inner">
+      <a href="https://www.behance.net/gallery/232492937/Manual-Munatika-Artesanias" target="_blank" rel="noopener" class="featured-visual rl" style="display:block;">
+        <div class="fv-inner">
+          <div style="width:72px;height:72px;border-radius:50%;background:rgba(0,0,0,.06);display:flex;align-items:center;justify-content:center;">
+            <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5" opacity=".3"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg>
+          </div>
+          <span style="font-size:.75rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:rgba(0,0,0,.2);">Proyecto destacado</span>
+        </div>
+        <span class="fv-pill">Manual de Marca</span>
+        <span class="fv-year">2024</span>
+      </a>
+      <div class="featured-content rr">
+        <span class="s-label">Proyecto destacado</span>
+        <h2>Munatika Artesanías — Identidad Visual</h2>
+        <p>Un sistema de identidad completo para una marca de artesanías de Jujuy que fusiona la riqueza cultural andina con diseño contemporáneo. Logotipo, paleta, tipografía y manual de marca.</p>
+        <div class="f-tags">
+          <span class="f-tag">Identidad Visual</span>
+          <span class="f-tag">Manual de Marca</span>
+          <span class="f-tag">Branding</span>
+          <span class="f-tag">Tipografía</span>
+        </div>
+        <a href="https://www.behance.net/gallery/232492937/Manual-Munatika-Artesanias" target="_blank" rel="noopener" class="btn-primary">Ver proyecto completo ↗</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── STATS ─── -->
+  <div class="stats reveal" id="work">
+    <div class="stat">
+      <span class="stat-num">1<span class="accent">.</span>699</span>
+      <span class="stat-label">Views en Behance</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">94<span class="accent">+</span></span>
+      <span class="stat-label">Apreciaciones</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">5<span class="accent">+</span></span>
+      <span class="stat-label">Proyectos publicados</span>
+    </div>
+    <div class="stat">
+      <span class="stat-num">2022<span class="accent">—</span></span>
+      <span class="stat-label">Activo en Behance</span>
+    </div>
+  </div>
+
+  <!-- ─── CAROUSEL ─── -->
+  <section class="carousel-section">
+    <div class="carousel-header reveal">
+      <div>
+        <span class="s-label">Portafolio</span>
+        <h2 class="s-title">Trabajos seleccionados</h2>
+      </div>
+      <div class="carousel-controls">
+        <button class="carousel-btn" id="prev" aria-label="Anterior">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M15 18l-6-6 6-6" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <button class="carousel-btn" id="next" aria-label="Siguiente">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+            <path d="M9 18l6-6-6-6" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          </svg>
+        </button>
+        <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener" class="behance-link">Ver todos en Behance ↗</a>
+      </div>
+    </div>
+
+    <div class="carousel-viewport">
+      <div class="carousel-track" id="track">
+
+        <a href="https://www.behance.net/gallery/232492937/Manual-Munatika-Artesanias" target="_blank" rel="noopener" class="carousel-card">
+          <div class="card-thumb"><div class="ph card-ph-1">
+            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <span class="ph-tag">Manual de Marca</span>
+          </div></div>
+          <div class="card-body">
+            <div><h3>Munatika Artesanías</h3><span class="card-meta">Identidad Visual · Manual de Marca</span></div>
+            <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </a>
+
+        <a href="https://www.behance.net/gallery/182046833/Vidagift-uxui" target="_blank" rel="noopener" class="carousel-card">
+          <div class="card-thumb"><div class="ph card-ph-2">
+            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/></svg></div>
+            <span class="ph-tag">UX / UI Design</span>
+          </div></div>
+          <div class="card-body">
+            <div><h3>Vidagift — UX/UI</h3><span class="card-meta">Diseño de Interfaz · Digital</span></div>
+            <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </a>
+
+        <a href="https://www.behance.net/gallery/177656503/Creacion-de-Personaje" target="_blank" rel="noopener" class="carousel-card">
+          <div class="card-thumb"><div class="ph card-ph-4">
+            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/></svg></div>
+            <span class="ph-tag">Character Design</span>
+          </div></div>
+          <div class="card-body">
+            <div><h3>Creación de Personaje</h3><span class="card-meta">Ilustración · Character Design</span></div>
+            <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </a>
+
+        <a href="https://www.behance.net/gallery/176423883/Manual-Rodmartt-Services" target="_blank" rel="noopener" class="carousel-card">
+          <div class="card-thumb"><div class="ph card-ph-5">
+            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/></svg></div>
+            <span class="ph-tag">Manual de Marca</span>
+          </div></div>
+          <div class="card-body">
+            <div><h3>Rodmartt Services</h3><span class="card-meta">Identidad Visual · Manual de Marca</span></div>
+            <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </a>
+
+        <a href="https://www.behance.net/gallery/204427213/Procaterme" target="_blank" rel="noopener" class="carousel-card">
+          <div class="card-thumb"><div class="ph card-ph-6">
+            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 3v6M15 3v6"/></svg></div>
+            <span class="ph-tag">Identidad Visual</span>
+          </div></div>
+          <div class="card-body">
+            <div><h3>Procaterme</h3><span class="card-meta">Identidad Visual · Branding</span></div>
+            <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </a>
+
+        <a href="https://www.behance.net/gallery/178284807/Independencia-y-Unidad-Colegio-de-abogados" target="_blank" rel="noopener" class="carousel-card">
+          <div class="card-thumb"><div class="ph card-ph-7">
+            <div class="ph-circle"><svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#0d0d0d" stroke-width="1.5"><path d="M12 3L3 8v1h18V8L12 3zM5 10v7M9 10v7M15 10v7M19 10v7M3 19h18"/></svg></div>
+            <span class="ph-tag">Editorial</span>
+          </div></div>
+          <div class="card-body">
+            <div><h3>Independencia y Unidad</h3><span class="card-meta">Diseño Editorial · Institucional</span></div>
+            <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
+          </div>
+        </a>
+
+      </div>
+    </div>
+
+    <div class="cdots" id="cdots">
+      <div class="cdot active" data-i="0"></div>
+      <div class="cdot" data-i="1"></div>
+      <div class="cdot" data-i="2"></div>
+      <div class="cdot" data-i="3"></div>
+      <div class="cdot" data-i="4"></div>
+      <div class="cdot" data-i="5"></div>
+    </div>
+  </section>
+
+  <!-- ─── ABOUT ─── -->
+  <section class="section-wrap" id="about">
+    <div class="about-grid">
+      <div class="about-img-wrap rl">
+        <div class="about-img">
+          <img src="asset/damdesignperfil.png" alt="Diego Damian — Damdesign" />
+        </div>
+        <div class="about-badge"><strong>+5</strong>años de carrera</div>
+      </div>
+      <div class="about-text rr">
+        <span class="s-label">Sobre mí</span>
+        <h2 class="s-title">Diseño con propósito, no solo con estética.</h2>
+        <p>Soy Diego Damian, diseñador gráfico de San Salvador de Jujuy, Argentina. Trabajo profesionalmente desde 2020 en identidades visuales, diseño UX/UI e ilustración que generan impacto real.</p>
+        <p>Cada proyecto arranca con una pregunta: ¿qué debe sentir la persona que lo ve? Esa respuesta guía cada decisión de color, forma y tipografía.</p>
+        <p>Disponible para proyectos freelance y colaboraciones en todo el mundo.</p>
+        <div class="skills">
+          <span class="skill-tag">Branding</span>
+          <span class="skill-tag">Illustrator</span>
+          <span class="skill-tag">Photoshop</span>
+          <span class="skill-tag">InDesign</span>
+          <span class="skill-tag">UX/UI</span>
+          <span class="skill-tag">Character Design</span>
+          <span class="skill-tag">Manuales de Marca</span>
+          <span class="skill-tag">Adobe Portfolio</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── SERVICES ─── -->
+  <section class="section-wrap services-bg" id="services">
+    <span class="s-label">Servicios</span>
+    <h2 class="s-title">Lo que hago</h2>
+    <div class="services-grid">
+
+      <div class="service-card reveal">
+        <span class="service-num">01 /</span>
+        <div class="service-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+          </svg>
+        </div>
+        <h3>Identidad & Manual de Marca</h3>
+        <p>Sistemas de identidad visual completos con logotipo, paleta, tipografía y manual de marca. Como en Munatika Artesanías: marcas con carácter propio y coherencia total.</p>
+      </div>
+
+      <div class="service-card reveal" style="transition-delay:.1s">
+        <span class="service-num">02 /</span>
+        <div class="service-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
+          </svg>
+        </div>
+        <h3>Diseño UX/UI</h3>
+        <p>Interfaces digitales centradas en el usuario. Flujos, wireframes y prototipos que convierten la experiencia en algo natural e intuitivo, como en el proyecto Vidagift.</p>
+      </div>
+
+      <div class="service-card reveal" style="transition-delay:.2s">
+        <span class="service-num">03 /</span>
+        <div class="service-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
+          </svg>
+        </div>
+        <h3>Ilustración & Character Design</h3>
+        <p>Personajes e ilustraciones con identidad propia. Piezas que van más allá de lo funcional y generan una conexión emocional con quien las ve.</p>
+      </div>
+
+    </div>
+  </section>
+
+  <!-- ─── PROCESS ─── -->
+  <section class="process-section" id="process">
+    <div class="process-header reveal">
+      <span class="s-label">Mi proceso</span>
+      <h2 class="s-title">Cómo trabajo</h2>
+    </div>
+    <div class="process-grid">
+      <div class="process-step reveal">
+        <span class="process-num">01</span>
+        <h3>Descubrimiento</h3>
+        <p>Brief profundo para entender el negocio, el público y los objetivos. Sin esta base, el diseño no tiene dirección.</p>
+      </div>
+      <div class="process-step reveal" style="transition-delay:.1s">
+        <span class="process-num">02</span>
+        <h3>Concepto</h3>
+        <p>Exploración visual, moodboards y propuestas iniciales. La etapa donde la creatividad tiene espacio para respirar.</p>
+      </div>
+      <div class="process-step reveal" style="transition-delay:.2s">
+        <span class="process-num">03</span>
+        <h3>Refinamiento</h3>
+        <p>Iteración con feedback hasta llegar a la solución precisa. Cada revisión acerca el diseño a su versión final.</p>
+      </div>
+      <div class="process-step reveal" style="transition-delay:.3s">
+        <span class="process-num">04</span>
+        <h3>Entrega</h3>
+        <p>Archivos organizados, formatos listos para usar y soporte post-entrega. El trabajo no termina al hacer clic en exportar.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── CONTACT ─── -->
+  <section id="contact">
+    <div class="contact-wrap reveal">
+      <span class="s-label">Contacto</span>
+      <h2 class="s-title">¿Tienes un proyecto <em>en mente</em>?</h2>
+      <p>Cuéntame tu idea. Estoy disponible para proyectos freelance y colaboraciones desde Jujuy, Argentina, para todo el mundo.</p>
+
+      <form class="contact-form" onsubmit="sendForm(event)">
+        <div class="form-row">
+          <input type="text"  id="fc-name"    placeholder="Tu nombre"          required />
+          <input type="email" id="fc-email"   placeholder="Tu email"           required />
+        </div>
+        <input  type="text"   id="fc-subject" placeholder="Asunto del proyecto" />
+        <textarea             id="fc-msg"     placeholder="Contame de tu proyecto..."></textarea>
+        <button type="submit" class="btn-primary" style="border:none;cursor:pointer;justify-content:center;">Enviar mensaje →</button>
+      </form>
+
+      <div class="contact-actions">
+        <a href="https://wa.me/543884541541" target="_blank" rel="noopener" class="btn-whatsapp">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="white"><path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347z"/><path d="M12 0C5.373 0 0 5.373 0 12c0 2.123.554 4.118 1.522 5.851L.057 23.885a.5.5 0 00.606.61l6.208-1.625A11.95 11.95 0 0012 24c6.627 0 12-5.373 12-12S18.627 0 12 0zm0 22a9.95 9.95 0 01-5.07-1.385l-.361-.214-3.737.979.997-3.645-.235-.374A9.953 9.953 0 012 12C2 6.477 6.477 2 12 2s10 4.477 10 10-4.477 10-10 10z"/></svg>
+          WhatsApp
+        </a>
+        <a href="mailto:damianmrueda@gmail.com" class="btn-outline">damianmrueda@gmail.com</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- ─── FOOTER ─── -->
+  <footer>
+    <p>© 2026 Damdesign · Diego Damian Mamani Rueda · Jujuy, Argentina</p>
+    <div class="social-links">
+      <a href="https://www.behance.net/damianruedadg"                         target="_blank" rel="noopener">Behance</a>
+      <a href="https://www.instagram.com/damian.dmr"                          target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/diego-damian-mamani-rueda"         target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://twitter.com/DamianRuedadg"                            target="_blank" rel="noopener">Twitter</a>
+    </div>
+  </footer>
+
+  <script>
+    /* ── CUSTOM CURSOR ── */
+    const cur  = document.getElementById('cur');
+    const curf = document.getElementById('cur-f');
+    let mx = 0, my = 0, fx = 0, fy = 0;
+    document.addEventListener('mousemove', e => {
+      mx = e.clientX; my = e.clientY;
+      cur.style.left = mx + 'px'; cur.style.top = my + 'px';
+    });
+    (function loop() {
+      fx += (mx - fx) * .12; fy += (my - fy) * .12;
+      curf.style.left = fx + 'px'; curf.style.top = fy + 'px';
+      requestAnimationFrame(loop);
+    })();
+    document.querySelectorAll('a, button').forEach(el => {
+      el.addEventListener('mouseenter', () => document.body.classList.add('ch'));
+      el.addEventListener('mouseleave', () => document.body.classList.remove('ch'));
+    });
+
+    /* ── LOADER ── */
+    window.addEventListener('load', () => {
+      setTimeout(() => {
+        document.getElementById('loader').classList.add('hide');
+        document.body.classList.remove('loading');
+      }, 1800);
+    });
+
+    /* ── NAV SCROLL ── */
+    const navbar = document.getElementById('navbar');
+    window.addEventListener('scroll', () => {
+      navbar.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    /* ── MOBILE MENU ── */
+    const hbg     = document.getElementById('hbg');
+    const mobMenu = document.getElementById('mob-menu');
+    hbg.addEventListener('click', () => {
+      hbg.classList.toggle('open');
+      mobMenu.classList.toggle('open');
+      document.body.style.overflow = mobMenu.classList.contains('open') ? 'hidden' : '';
+    });
+    function closeMenu() {
+      hbg.classList.remove('open');
+      mobMenu.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    /* ── CAROUSEL ── */
+    const track   = document.getElementById('track');
+    const cards   = track.querySelectorAll('.carousel-card');
+    const dots    = document.querySelectorAll('.cdot');
+    const prevBtn = document.getElementById('prev');
+    const nextBtn = document.getElementById('next');
+    let current = 0;
+    const total = cards.length;
+    const getVis = () => window.innerWidth < 960 ? 1 : 2;
+    const maxIdx = () => total - getVis();
+
+    function goTo(i) {
+      current = Math.max(0, Math.min(i, maxIdx()));
+      const w = cards[0].getBoundingClientRect().width;
+      track.style.transform = `translateX(-${current * (w + 24)}px)`;
+      dots.forEach((d, j) => d.classList.toggle('active', j === current));
+    }
+
+    prevBtn.addEventListener('click', () => goTo(current - 1));
+    nextBtn.addEventListener('click', () => goTo(current + 1));
+    dots.forEach(d => d.addEventListener('click', () => goTo(+d.dataset.i)));
+
+    let ap = setInterval(() => goTo(current >= maxIdx() ? 0 : current + 1), 4000);
+    track.parentElement.addEventListener('mouseenter', () => clearInterval(ap));
+    track.parentElement.addEventListener('mouseleave', () => {
+      ap = setInterval(() => goTo(current >= maxIdx() ? 0 : current + 1), 4000);
+    });
+
+    let sx = 0;
+    track.addEventListener('touchstart', e => { sx = e.touches[0].clientX; }, { passive: true });
+    track.addEventListener('touchend', e => {
+      const d = sx - e.changedTouches[0].clientX;
+      if (Math.abs(d) > 40) goTo(d > 0 ? current + 1 : current - 1);
+    });
+    window.addEventListener('resize', () => goTo(current));
+
+    /* ── CONTACT FORM ── */
+    function sendForm(e) {
+      e.preventDefault();
+      const name    = document.getElementById('fc-name').value.trim();
+      const email   = document.getElementById('fc-email').value.trim();
+      const subject = document.getElementById('fc-subject').value.trim();
+      const msg     = document.getElementById('fc-msg').value.trim();
+      const body    = `Hola Damian,%0ANombre: ${name}%0AEmail: ${email}%0AAsunto: ${subject}%0A%0A${msg}`;
+      window.location.href = `mailto:damianmrueda@gmail.com?subject=${encodeURIComponent(subject || 'Proyecto desde Damdesign')}&body=${body}`;
+    }
+
+    /* ── SCROLL REVEAL ── */
+    const obs = new IntersectionObserver(entries => {
+      entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); obs.unobserve(e.target); } });
+    }, { threshold: 0.1 });
+    document.querySelectorAll('.reveal, .rl, .rr').forEach(el => obs.observe(el));
+  </script>
+
+</body>
+</html>
