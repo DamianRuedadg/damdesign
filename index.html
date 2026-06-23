@@ -7,6 +7,15 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&family=Inter:wght@400;500;600&display=swap" rel="stylesheet" />
+
+  <!-- theme flash prevention -->
+  <script>
+    (function(){
+      var t = localStorage.getItem('theme') || 'light';
+      if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+    })();
+  </script>
+
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
@@ -20,6 +29,59 @@
       --accent2: #fff2ee;
     }
 
+    /* ─── DARK MODE ─── */
+    [data-theme="dark"] {
+      --bg:      #111110;
+      --surface: #1c1b19;
+      --dark:    #f0efe9;
+      --gray:    #999;
+      --border:  rgba(255,255,255,0.09);
+      --accent:  #e8572a;
+      --accent2: #2d1a11;
+    }
+    [data-theme="dark"] nav.scrolled {
+      background: rgba(17,17,16,.92);
+    }
+    [data-theme="dark"] .btn-outline {
+      border-color: rgba(255,255,255,.18);
+    }
+    [data-theme="dark"] .modal-overlay {
+      background: rgba(0,0,0,.72);
+    }
+    [data-theme="dark"] .carousel-btn svg path,
+    [data-theme="dark"] .card-arrow svg path {
+      stroke: var(--dark);
+    }
+    [data-theme="dark"] .about-badge {
+      box-shadow: 0 8px 32px rgba(0,0,0,.45);
+    }
+    [data-theme="dark"] .hero-deco {
+      background: radial-gradient(circle,rgba(232,87,42,.18) 0%,transparent 65%);
+    }
+    [data-theme="dark"] .hbg span { background: var(--dark); }
+
+    /* botones CTA sólidos: en dark mode usan acento naranja en vez de --dark */
+    [data-theme="dark"] .btn-primary { background: var(--accent); color: #fff; }
+    [data-theme="dark"] .nav-cta     { background: var(--accent) !important; color: #fff !important; }
+
+    /* ticker: mantener fondo oscuro en dark mode */
+    [data-theme="dark"] .ticker { background: #0c0c0b; color: var(--dark); }
+
+    /* fv-pill: texto oscuro sobre fondo blanco (la pill tiene rgba blanco) */
+    [data-theme="dark"] .fv-pill { color: #111; }
+
+    /* ─── THEME TRANSITIONS ─── */
+    body, nav, .hero, .ticker, .featured-section,
+    .stats, .stat, .carousel-section, .carousel-card, .card-body,
+    .section-wrap, .service-card, .process-section, .process-step,
+    .contact-wrap, .contact-form input, .contact-form textarea,
+    .modal-card, #loader, .mob-menu, footer,
+    .about-badge, .loader-logo, .hero-badge, .skill-tag,
+    .btn-outline, .f-tag, .behance-link {
+      transition: background-color .3s ease, color .3s ease,
+                  border-color .3s ease, box-shadow .3s ease;
+    }
+
     html { scroll-behavior: smooth; }
 
     body {
@@ -31,20 +93,16 @@
 
     /* ─── CURSOR ─── */
     #cur, #cur-f {
-      position: fixed;
-      border-radius: 50%;
-      pointer-events: none;
-      z-index: 9999;
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 9999;
       transform: translate(-50%, -50%);
     }
     #cur {
-      width: 8px; height: 8px;
-      background: var(--accent);
+      width: 8px; height: 8px; background: var(--accent);
       transition: width .25s, height .25s;
     }
     #cur-f {
-      z-index: 9998;
-      width: 40px; height: 40px;
+      z-index: 9998; width: 40px; height: 40px;
       border: 1.5px solid rgba(232,87,42,.35);
       transition: width .3s, height .3s, border-color .3s;
     }
@@ -53,14 +111,11 @@
     @media (hover: none) { #cur, #cur-f { display: none; } }
 
     /* ─── REVEAL ─── */
-    .reveal {
-      opacity: 0; transform: translateY(28px);
-      transition: opacity .7s ease, transform .7s ease;
-    }
+    .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
     .reveal.v { opacity: 1; transform: none; }
     .rl { opacity: 0; transform: translateX(-32px); transition: opacity .7s ease, transform .7s ease; }
     .rl.v { opacity: 1; transform: none; }
-    .rr { opacity: 0; transform: translateX(32px);  transition: opacity .7s ease, transform .7s ease; }
+    .rr { opacity: 0; transform: translateX(32px); transition: opacity .7s ease, transform .7s ease; }
     .rr.v { opacity: 1; transform: none; }
 
     /* ─── NAV ─── */
@@ -93,7 +148,23 @@
       background: var(--dark); color: #fff !important;
       padding: .5rem 1.25rem; border-radius: 100px;
     }
-    .nav-cta:hover { background: var(--accent) !important; }
+    .nav-cta:hover { background: var(--accent) !important; color: #fff !important; }
+
+    /* ─── NAV TOOLS ─── */
+    .nav-tools { display: flex; align-items: center; gap: .5rem; }
+    .tool-btn {
+      width: 34px; height: 34px; border-radius: 50%;
+      border: 1.5px solid var(--border); background: transparent;
+      cursor: pointer; display: flex; align-items: center; justify-content: center;
+      color: var(--gray); font-size: .7rem; font-weight: 700; letter-spacing: .04em;
+      transition: background .2s, border-color .2s, color .2s;
+      flex-shrink: 0;
+    }
+    .tool-btn:hover { border-color: var(--dark); color: var(--dark); }
+    .icon-sun { display: none; }
+    .icon-moon { display: block; }
+    [data-theme="dark"] .icon-sun { display: block; }
+    [data-theme="dark"] .icon-moon { display: none; }
 
     /* hamburger */
     .hbg {
@@ -103,7 +174,7 @@
     .hbg span {
       display: block; width: 24px; height: 2px;
       background: var(--dark); border-radius: 2px;
-      transition: transform .3s, opacity .3s;
+      transition: transform .3s, opacity .3s, background .3s;
     }
     .hbg.open span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
     .hbg.open span:nth-child(2) { opacity: 0; }
@@ -114,7 +185,7 @@
       position: fixed; inset: 0; background: var(--bg); z-index: 300;
       display: flex; flex-direction: column; align-items: center; justify-content: center;
       gap: 2.5rem; opacity: 0; visibility: hidden;
-      transition: opacity .4s, visibility .4s;
+      transition: opacity .4s, visibility .4s, background-color .3s;
     }
     .mob-menu.open { opacity: 1; visibility: visible; }
     .mob-menu a {
@@ -167,7 +238,7 @@
     }
     .hero-badge .dot {
       width: 7px; height: 7px; background: #3ecf8e; border-radius: 50%;
-      animation: blink 2s ease-in-out infinite;
+      animation: blink 2s ease-in-out infinite; flex-shrink: 0;
     }
     @keyframes blink { 0%,100%{opacity:1} 50%{opacity:.3} }
     @keyframes fadeDown {
@@ -181,10 +252,7 @@
       max-width: 14ch; margin-bottom: 2rem;
     }
     .hero h1 .line { display: block; overflow: hidden; }
-    .hero h1 .line span {
-      display: block;
-      animation: slideUp .9s cubic-bezier(.16,1,.3,1) both;
-    }
+    .hero h1 .line span { display: block; animation: slideUp .9s cubic-bezier(.16,1,.3,1) both; }
     .hero h1 .line:nth-child(2) span { animation-delay: .12s; }
     @keyframes slideUp {
       from { transform: translateY(110%); opacity: 0; }
@@ -193,7 +261,7 @@
     .hero h1 em { font-style: normal; color: var(--accent); }
     .hero-bottom { display: flex; flex-direction: column; align-items: center; gap: 2rem; }
     .hero p {
-      color: var(--gray); font-size: 1.05rem; max-width: 46ch;
+      color: var(--gray); font-size: 1.05rem; max-width: 720px;
       line-height: 1.75;
       animation: fadeUp 1s .35s cubic-bezier(.16,1,.3,1) both;
     }
@@ -221,7 +289,7 @@
       font-size: .85rem; font-weight: 500;
       padding: .9rem 1.8rem; border-radius: 100px;
       border: 1.5px solid rgba(0,0,0,.15);
-      transition: border-color .2s, transform .2s, box-shadow .2s;
+      transition: border-color .2s, transform .2s, box-shadow .2s, color .3s, background-color .3s;
     }
     .btn-outline:hover { border-color: var(--dark); transform: translateY(-2px); box-shadow: 0 8px 24px rgba(0,0,0,.08); }
 
@@ -231,9 +299,7 @@
       overflow: hidden; padding: 1rem 0;
       border-top: 1px solid rgba(255,255,255,.05);
     }
-    .ticker-track {
-      display: flex; animation: ticker 22s linear infinite; width: max-content;
-    }
+    .ticker-track { display: flex; animation: ticker 22s linear infinite; width: max-content; }
     .ticker-track span {
       font-family: 'Manrope', sans-serif; font-weight: 700;
       font-size: .82rem; letter-spacing: .08em; text-transform: uppercase;
@@ -243,19 +309,11 @@
     @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
     /* ─── FEATURED WORK ─── */
-    .featured-section {
-      padding: 7rem 4rem;
-      border-bottom: 1px solid var(--border);
-    }
-    .featured-inner {
-      display: grid; grid-template-columns: 1fr 1fr;
-      gap: 5rem; align-items: center;
-    }
+    .featured-section { padding: 7rem 4rem; border-bottom: 1px solid var(--border); }
+    .featured-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
     .featured-visual {
-      aspect-ratio: 4/3; border-radius: 20px;
-      overflow: hidden;
-      background: linear-gradient(135deg,#ede9e0,#e0dbd0);
-      position: relative;
+      aspect-ratio: 4/3; border-radius: 20px; overflow: hidden;
+      background: linear-gradient(135deg,#ede9e0,#e0dbd0); position: relative;
     }
     .fv-inner {
       width: 100%; height: 100%;
@@ -293,10 +351,7 @@
     }
 
     /* ─── STATS ─── */
-    .stats {
-      display: grid; grid-template-columns: repeat(4,1fr);
-      border-bottom: 1px solid var(--border);
-    }
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--border); }
     .stat { padding: 3rem 2.5rem; border-right: 1px solid var(--border); }
     .stat:last-child { border-right: none; }
     .stat-num {
@@ -306,10 +361,7 @@
       display: block; margin-bottom: .4rem;
     }
     .stat-num .accent { color: var(--accent); }
-    .stat-label {
-      font-size: .78rem; color: var(--gray); font-weight: 500;
-      letter-spacing: .06em; text-transform: uppercase;
-    }
+    .stat-label { font-size: .78rem; color: var(--gray); font-weight: 500; letter-spacing: .06em; text-transform: uppercase; }
 
     /* ─── SECTION LABEL / TITLE ─── */
     .section-wrap { padding: 6rem 4rem; }
@@ -360,7 +412,7 @@
       flex: 0 0 calc(50% - .75rem);
       background: var(--surface); border-radius: 16px;
       overflow: hidden; cursor: pointer;
-      transition: transform .35s, box-shadow .35s;
+      transition: transform .35s, box-shadow .35s, background-color .3s;
       text-decoration: none; color: inherit;
     }
     .carousel-card:hover { transform: translateY(-6px); box-shadow: 0 24px 60px rgba(0,0,0,.1); }
@@ -378,10 +430,7 @@
       display: flex; align-items: center; justify-content: center;
     }
     .ph-circle svg { opacity: .3; }
-    .ph-tag {
-      font-size: .68rem; font-weight: 600;
-      letter-spacing: .14em; text-transform: uppercase; color: rgba(0,0,0,.25);
-    }
+    .ph-tag { font-size: .68rem; font-weight: 600; letter-spacing: .14em; text-transform: uppercase; color: rgba(0,0,0,.25); }
     .card-ph-1 { background: linear-gradient(135deg,#ede9e0,#e0dbd0); }
     .card-ph-2 { background: linear-gradient(135deg,#dfe6ed,#d0dde8); }
     .card-ph-4 { background: linear-gradient(135deg,#e0ede4,#d0e8d8); }
@@ -404,7 +453,7 @@
       transition: background .2s, transform .2s;
     }
     .carousel-card:hover .card-arrow { background: var(--accent); transform: rotate(45deg); }
-    .carousel-card:hover .card-arrow svg path { stroke: #fff; }
+    .carousel-card:hover .card-arrow svg path { stroke: #fff !important; }
     .cdots { display: flex; gap: .5rem; justify-content: center; margin-top: 2.5rem; }
     .cdot {
       width: 6px; height: 6px; border-radius: 50%;
@@ -446,7 +495,7 @@
     .service-card {
       background: var(--surface); border: 1.5px solid var(--border);
       border-radius: 20px; padding: 2.5rem;
-      transition: border-color .3s, transform .3s, box-shadow .3s;
+      transition: border-color .3s, transform .3s, box-shadow .3s, background-color .3s;
     }
     .service-card:hover { border-color: var(--accent); transform: translateY(-6px); box-shadow: 0 20px 60px rgba(232,87,42,.1); }
     .service-num {
@@ -491,9 +540,9 @@
       font-family: 'Manrope', sans-serif; font-weight: 800;
       font-size: 3rem; letter-spacing: -.04em;
       color: rgba(0,0,0,.06); display: block;
-      margin-bottom: .5rem; line-height: 1;
-      transition: color .3s;
+      margin-bottom: .5rem; line-height: 1; transition: color .3s;
     }
+    [data-theme="dark"] .process-num { color: rgba(255,255,255,.06); }
     .process-step:hover .process-num { color: rgba(232,87,42,.12); }
     .process-step h3 {
       font-family: 'Manrope', sans-serif; font-weight: 700;
@@ -517,7 +566,7 @@
       border: 1.5px solid var(--border); border-radius: 12px;
       padding: .9rem 1.1rem;
       font-family: 'Inter', sans-serif; font-size: .88rem; color: var(--dark);
-      outline: none; transition: border-color .2s, box-shadow .2s; resize: none;
+      outline: none; transition: border-color .2s, box-shadow .2s, background-color .3s, color .3s; resize: none;
     }
     .contact-form input::placeholder, .contact-form textarea::placeholder { color: #bbb; }
     .contact-form input:focus, .contact-form textarea:focus {
@@ -543,7 +592,7 @@
       text-align: center;
       box-shadow: 0 32px 80px rgba(0,0,0,.16);
       transform: scale(.92) translateY(16px);
-      transition: transform .45s cubic-bezier(.16,1,.3,1);
+      transition: transform .45s cubic-bezier(.16,1,.3,1), background-color .3s;
     }
     .modal-overlay.open .modal-card { transform: scale(1) translateY(0); }
     .modal-icon {
@@ -659,6 +708,9 @@
       .form-row { grid-template-columns: 1fr; }
 
       footer { padding: 1.5rem; flex-direction: column; gap: 1rem; text-align: center; }
+
+      .nav-tools { gap: .35rem; }
+      .tool-btn { width: 30px; height: 30px; }
     }
     @media (max-width: 480px) {
       .process-grid { grid-template-columns: 1fr; }
@@ -677,16 +729,16 @@
   <div id="loader">
     <div class="loader-logo">Dam<span>design</span></div>
     <div class="loader-bar-wrap"><div class="loader-bar"></div></div>
-    <span class="loader-label">Cargando portafolio</span>
+    <span class="loader-label" data-i18n="loader-label">Cargando portafolio</span>
   </div>
 
   <!-- ─── MOBILE MENU ─── -->
   <div class="mob-menu" id="mob-menu">
-    <a href="#work"     onclick="closeMenu()">Trabajo</a>
-    <a href="#about"    onclick="closeMenu()">Sobre mí</a>
-    <a href="#services" onclick="closeMenu()">Servicios</a>
-    <a href="#process"  onclick="closeMenu()">Proceso</a>
-    <a href="#contact"  onclick="closeMenu()" style="color:var(--accent)">Contacto</a>
+    <a href="#work"     onclick="closeMenu()" data-i18n="nav-work">Trabajo</a>
+    <a href="#about"    onclick="closeMenu()" data-i18n="nav-about">Sobre mí</a>
+    <a href="#services" onclick="closeMenu()" data-i18n="nav-services">Servicios</a>
+    <a href="#process"  onclick="closeMenu()" data-i18n="nav-process">Proceso</a>
+    <a href="#contact"  onclick="closeMenu()" style="color:var(--accent)" data-i18n="nav-contact">Contacto</a>
     <div class="mob-social">
       <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener">Behance</a>
       <a href="https://www.instagram.com/damian.dmr" target="_blank" rel="noopener">Instagram</a>
@@ -698,12 +750,35 @@
   <nav id="navbar">
     <a href="#" class="logo">Dam<span>design</span></a>
     <ul>
-      <li><a href="#work">Trabajo</a></li>
-      <li><a href="#about">Sobre mí</a></li>
-      <li><a href="#services">Servicios</a></li>
-      <li><a href="#process">Proceso</a></li>
-      <li><a href="#contact" class="nav-cta">Contacto</a></li>
+      <li><a href="#work"     data-i18n="nav-work">Trabajo</a></li>
+      <li><a href="#about"    data-i18n="nav-about">Sobre mí</a></li>
+      <li><a href="#services" data-i18n="nav-services">Servicios</a></li>
+      <li><a href="#process"  data-i18n="nav-process">Proceso</a></li>
+      <li><a href="#contact" class="nav-cta" data-i18n="nav-contact">Contacto</a></li>
     </ul>
+    <div class="nav-tools">
+      <button class="tool-btn" id="theme-btn" aria-label="Cambiar tema">
+        <!-- moon: shown in light mode -->
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M21 12.79A9 9 0 1111.21 3 7 7 0 0021 12.79z"/>
+        </svg>
+        <!-- sun: shown in dark mode -->
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="12" cy="12" r="5"/>
+          <line x1="12" y1="1" x2="12" y2="3"/>
+          <line x1="12" y1="21" x2="12" y2="23"/>
+          <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/>
+          <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/>
+          <line x1="1" y1="12" x2="3" y2="12"/>
+          <line x1="21" y1="12" x2="23" y2="12"/>
+          <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/>
+          <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
+        </svg>
+      </button>
+      <button class="tool-btn" id="lang-btn" aria-label="Cambiar idioma">
+        <span id="lang-label">EN</span>
+      </button>
+    </div>
     <button class="hbg" id="hbg" aria-label="Menú">
       <span></span><span></span><span></span>
     </button>
@@ -715,21 +790,21 @@
     <div class="hero-deco-ring"></div>
     <div class="hero-badge">
       <span class="dot"></span>
-      Disponible para proyectos freelance · Jujuy, Argentina
+      <span data-i18n="hero-badge">Disponible para proyectos freelance · Jujuy, Argentina</span>
     </div>
     <h1>
-      <span class="line"><span>Diseño que <em>habla</em></span></span>
-      <span class="line"><span>antes de que leas.</span></span>
+      <span class="line"><span data-i18n="hero-h1-1">Diseño que <em>habla</em></span></span>
+      <span class="line"><span data-i18n="hero-h1-2">antes de que leas.</span></span>
     </h1>
     <div class="hero-bottom">
-      <p>Soy Diego Damian, diseñador gráfico de Jujuy, Argentina.<br>Creo identidades de marca, interfaces UX/UI e ilustraciones<br>que conectan con las personas y hacen que tu marca sea imposible de ignorar.</p>
+      <p data-i18n="hero-p">Soy Diego Damian, diseñador gráfico de Jujuy, Argentina.<br>Creo identidades de marca, interfaces UX/UI e ilustraciones<br>que conectan con las personas y hacen que tu marca sea imposible de ignorar.</p>
       <div class="hero-actions">
-        <a href="#work" class="btn-primary">Ver portafolio ↓</a>
-        <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener" class="btn-outline">Behance ↗</a>
+        <a href="#work" class="btn-primary" data-i18n="hero-btn-work">Ver portafolio ↓</a>
+        <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener" class="btn-outline" data-i18n="hero-btn-behance">Behance ↗</a>
       </div>
     </div>
     <div style="position:absolute;bottom:2.5rem;left:50%;transform:translateX(-50%);display:flex;flex-direction:column;align-items:center;gap:.5rem;animation:fadeUp 1s .7s both;">
-      <span style="font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);">Scroll</span>
+      <span style="font-size:.7rem;font-weight:600;letter-spacing:.14em;text-transform:uppercase;color:var(--gray);" data-i18n="hero-scroll">Scroll</span>
       <div style="width:1px;height:40px;background:linear-gradient(to bottom,var(--gray),transparent);"></div>
     </div>
   </section>
@@ -760,21 +835,21 @@
   <section class="featured-section">
     <div class="featured-inner">
       <a href="https://www.behance.net/gallery/204427213/Procaterme" target="_blank" rel="noopener" class="featured-visual rl" style="display:block;">
-        <img src="asset/procaterme.png" alt="Procaterme — Proyecto destacado" style="width:100%;height:100%;object-fit:cover;display:block;" />
-        <span class="fv-pill">Identidad Visual</span>
+        <img src="asset/procaterme.png" alt="Procater.me — Proyecto destacado" style="width:100%;height:100%;object-fit:cover;display:block;" />
+        <span class="fv-pill" data-i18n="feat-pill">Identidad Visual</span>
         <span class="fv-year">2024</span>
       </a>
       <div class="featured-content rr">
-        <span class="s-label">Proyecto destacado</span>
-        <h2>Procater.me — Identidad Visual & Web</h2>
-        <p>Sistema de <em style="font-style:normal;color:var(--accent);font-weight:600;">identidad visual completo</em> para Procater.me: logotipo, paleta, tipografía y manual de marca. Además se desarrolló el <em style="font-style:normal;color:var(--accent);font-weight:600;">diseño del sitio web</em>, llevando la identidad al entorno digital con coherencia total entre <em style="font-style:normal;color:var(--accent);font-weight:600;">marca y experiencia</em>.</p>
+        <span class="s-label" data-i18n="feat-label">Proyecto destacado</span>
+        <h2 data-i18n="feat-h2">Procater.me — Identidad Visual & Web</h2>
+        <p data-i18n="feat-p">Sistema de <em style="font-style:normal;color:var(--accent);font-weight:600;">identidad visual completo</em> para Procater.me: logotipo, paleta, tipografía y manual de marca. Además se desarrolló el <em style="font-style:normal;color:var(--accent);font-weight:600;">diseño del sitio web</em>, llevando la identidad al entorno digital con coherencia total entre <em style="font-style:normal;color:var(--accent);font-weight:600;">marca y experiencia</em>.</p>
         <div class="f-tags">
-          <span class="f-tag">Identidad Visual</span>
-          <span class="f-tag">Branding</span>
-          <span class="f-tag">Diseño Web</span>
-          <span class="f-tag">Logotipo</span>
+          <span class="f-tag" data-i18n="feat-tag-1">Identidad Visual</span>
+          <span class="f-tag" data-i18n="feat-tag-2">Branding</span>
+          <span class="f-tag" data-i18n="feat-tag-3">Diseño Web</span>
+          <span class="f-tag" data-i18n="feat-tag-4">Logotipo</span>
         </div>
-        <a href="https://www.behance.net/gallery/204427213/Procaterme" target="_blank" rel="noopener" class="btn-primary">Ver proyecto completo ↗</a>
+        <a href="https://www.behance.net/gallery/204427213/Procaterme" target="_blank" rel="noopener" class="btn-primary" data-i18n="feat-cta">Ver proyecto completo ↗</a>
       </div>
     </div>
   </section>
@@ -783,19 +858,19 @@
   <div class="stats reveal" id="work">
     <div class="stat">
       <span class="stat-num">1<span class="accent">.</span>699</span>
-      <span class="stat-label">Views en Behance</span>
+      <span class="stat-label" data-i18n="stat-label-1">Views en Behance</span>
     </div>
     <div class="stat">
       <span class="stat-num">94<span class="accent">+</span></span>
-      <span class="stat-label">Apreciaciones</span>
+      <span class="stat-label" data-i18n="stat-label-2">Apreciaciones</span>
     </div>
     <div class="stat">
       <span class="stat-num">5<span class="accent">+</span></span>
-      <span class="stat-label">Proyectos publicados</span>
+      <span class="stat-label" data-i18n="stat-label-3">Proyectos publicados</span>
     </div>
     <div class="stat">
       <span class="stat-num">2022<span class="accent">—</span></span>
-      <span class="stat-label">Activo en Behance</span>
+      <span class="stat-label" data-i18n="stat-label-4">Activo en Behance</span>
     </div>
   </div>
 
@@ -803,8 +878,8 @@
   <section class="carousel-section">
     <div class="carousel-header reveal">
       <div>
-        <span class="s-label">Portafolio</span>
-        <h2 class="s-title">Trabajos seleccionados</h2>
+        <span class="s-label" data-i18n="carousel-label">Portafolio</span>
+        <h2 class="s-title" data-i18n="carousel-title">Trabajos seleccionados</h2>
       </div>
       <div class="carousel-controls">
         <button class="carousel-btn" id="prev" aria-label="Anterior">
@@ -817,7 +892,7 @@
             <path d="M9 18l6-6-6-6" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
-        <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener" class="behance-link">Ver todos en Behance ↗</a>
+        <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener" class="behance-link" data-i18n="carousel-behance">Ver todos en Behance ↗</a>
       </div>
     </div>
 
@@ -829,7 +904,7 @@
             <img src="asset/vidagift.png" alt="Vidagift UX/UI" style="width:100%;height:100%;object-fit:cover;display:block;" />
           </div>
           <div class="card-body">
-            <div><h3>Vidagift — UX/UI</h3><span class="card-meta">Diseño de Interfaz · Digital</span></div>
+            <div><h3>Vidagift — UX/UI</h3><span class="card-meta" data-i18n="card-1-meta">Diseño de Interfaz · Digital</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
           </div>
         </a>
@@ -839,7 +914,7 @@
             <img src="asset/munatika.png" alt="Munatika Artesanías" style="width:100%;height:100%;object-fit:cover;display:block;" />
           </div>
           <div class="card-body">
-            <div><h3>Munatika Artesanías</h3><span class="card-meta">Identidad Visual · Manual de Marca</span></div>
+            <div><h3>Munatika Artesanías</h3><span class="card-meta" data-i18n="card-2-meta">Identidad Visual · Manual de Marca</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
           </div>
         </a>
@@ -849,7 +924,7 @@
             <img src="asset/personaje.png" alt="Creación de Personaje" style="width:100%;height:100%;object-fit:cover;display:block;" />
           </div>
           <div class="card-body">
-            <div><h3>Creación de Personaje</h3><span class="card-meta">Ilustración · Character Design</span></div>
+            <div><h3 data-i18n="card-3-title">Creación de Personaje</h3><span class="card-meta" data-i18n="card-3-meta">Ilustración · Character Design</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
           </div>
         </a>
@@ -859,7 +934,7 @@
             <img src="asset/rodmartt.png" alt="Rodmartt Services" style="width:100%;height:100%;object-fit:cover;display:block;" />
           </div>
           <div class="card-body">
-            <div><h3>Rodmartt Services</h3><span class="card-meta">Identidad Visual · Manual de Marca</span></div>
+            <div><h3>Rodmartt Services</h3><span class="card-meta" data-i18n="card-4-meta">Identidad Visual · Manual de Marca</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
           </div>
         </a>
@@ -869,7 +944,7 @@
             <img src="asset/independencia.png" alt="Independencia y Unidad" style="width:100%;height:100%;object-fit:cover;display:block;" />
           </div>
           <div class="card-body">
-            <div><h3>Independencia y Unidad</h3><span class="card-meta">Diseño Editorial · Institucional</span></div>
+            <div><h3 data-i18n="card-5-title">Independencia y Unidad</h3><span class="card-meta" data-i18n="card-5-meta">Diseño Editorial · Institucional</span></div>
             <div class="card-arrow"><svg width="16" height="16" viewBox="0 0 24 24" fill="none"><path d="M7 17L17 7M17 7H7M17 7v10" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round"/></svg></div>
           </div>
         </a>
@@ -893,14 +968,14 @@
         <div class="about-img">
           <img src="asset/damdesignperfil.png" alt="Diego Damian — Damdesign" />
         </div>
-        <div class="about-badge"><strong>+5</strong>años de carrera</div>
+        <div class="about-badge"><strong>+5</strong><span data-i18n="about-badge">años de carrera</span></div>
       </div>
       <div class="about-text rr">
-        <span class="s-label">Sobre mí</span>
-        <h2 class="s-title">Diseño con propósito, no solo con estética.</h2>
-        <p>Soy Diego Damian, diseñador gráfico de San Salvador de Jujuy, Argentina. Trabajo profesionalmente desde 2020 en identidades visuales, diseño UX/UI e ilustración que generan impacto real.</p>
-        <p>Cada proyecto arranca con una pregunta: ¿qué debe sentir la persona que lo ve? Esa respuesta guía cada decisión de color, forma y tipografía.</p>
-        <p>Disponible para proyectos freelance y colaboraciones en todo el mundo.</p>
+        <span class="s-label" data-i18n="about-label">Sobre mí</span>
+        <h2 class="s-title" data-i18n="about-title">Diseño con propósito, no solo con estética.</h2>
+        <p data-i18n="about-p1">Soy Diego Damian, diseñador gráfico de San Salvador de Jujuy, Argentina. Trabajo profesionalmente desde 2020 en identidades visuales, diseño UX/UI e ilustración que generan impacto real.</p>
+        <p data-i18n="about-p2">Cada proyecto arranca con una pregunta: ¿qué debe sentir la persona que lo ve? Esa respuesta guía cada decisión de color, forma y tipografía.</p>
+        <p data-i18n="about-p3">Disponible para proyectos freelance y colaboraciones en todo el mundo.</p>
         <div class="skills">
           <span class="skill-tag">Branding</span>
           <span class="skill-tag">Illustrator</span>
@@ -917,8 +992,8 @@
 
   <!-- ─── SERVICES ─── -->
   <section class="section-wrap services-bg" id="services">
-    <span class="s-label">Servicios</span>
-    <h2 class="s-title">Lo que hago</h2>
+    <span class="s-label" data-i18n="services-label">Servicios</span>
+    <h2 class="s-title" data-i18n="services-title">Lo que hago</h2>
     <div class="services-grid">
 
       <div class="service-card reveal">
@@ -928,8 +1003,8 @@
             <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
           </svg>
         </div>
-        <h3>Identidad & Manual de Marca</h3>
-        <p>Sistemas de identidad visual completos con logotipo, paleta, tipografía y manual de marca. Como en Munatika Artesanías: marcas con carácter propio y coherencia total.</p>
+        <h3 data-i18n="service-1-title">Identidad & Manual de Marca</h3>
+        <p data-i18n="service-1-p">Sistemas de identidad visual completos con logotipo, paleta, tipografía y manual de marca. Como en Munatika Artesanías: marcas con carácter propio y coherencia total.</p>
       </div>
 
       <div class="service-card reveal" style="transition-delay:.1s">
@@ -939,8 +1014,8 @@
             <rect x="2" y="3" width="20" height="14" rx="2"/><path d="M8 21h8M12 17v4"/>
           </svg>
         </div>
-        <h3>Diseño UX/UI</h3>
-        <p>Interfaces digitales centradas en el usuario. Flujos, wireframes y prototipos que convierten la experiencia en algo natural e intuitivo, como en el proyecto Vidagift.</p>
+        <h3 data-i18n="service-2-title">Diseño UX/UI</h3>
+        <p data-i18n="service-2-p">Interfaces digitales centradas en el usuario. Flujos, wireframes y prototipos que convierten la experiencia en algo natural e intuitivo, como en el proyecto Vidagift.</p>
       </div>
 
       <div class="service-card reveal" style="transition-delay:.2s">
@@ -950,8 +1025,8 @@
             <circle cx="12" cy="8" r="4"/><path d="M4 20c0-4 3.6-7 8-7s8 3 8 7"/>
           </svg>
         </div>
-        <h3>Ilustración & Character Design</h3>
-        <p>Personajes e ilustraciones con identidad propia. Piezas que van más allá de lo funcional y generan una conexión emocional con quien las ve.</p>
+        <h3 data-i18n="service-3-title">Ilustración & Character Design</h3>
+        <p data-i18n="service-3-p">Personajes e ilustraciones con identidad propia. Piezas que van más allá de lo funcional y generan una conexión emocional con quien las ve.</p>
       </div>
 
     </div>
@@ -960,29 +1035,29 @@
   <!-- ─── PROCESS ─── -->
   <section class="process-section" id="process">
     <div class="process-header reveal">
-      <span class="s-label">Mi proceso</span>
-      <h2 class="s-title">Cómo trabajo</h2>
+      <span class="s-label" data-i18n="process-label">Mi proceso</span>
+      <h2 class="s-title" data-i18n="process-title">Cómo trabajo</h2>
     </div>
     <div class="process-grid">
       <div class="process-step reveal">
         <span class="process-num">01</span>
-        <h3>Descubrimiento</h3>
-        <p>Brief profundo para entender el negocio, el público y los objetivos. Sin esta base, el diseño no tiene dirección.</p>
+        <h3 data-i18n="process-1-title">Descubrimiento</h3>
+        <p data-i18n="process-1-p">Brief profundo para entender el negocio, el público y los objetivos. Sin esta base, el diseño no tiene dirección.</p>
       </div>
       <div class="process-step reveal" style="transition-delay:.1s">
         <span class="process-num">02</span>
-        <h3>Concepto</h3>
-        <p>Exploración visual, moodboards y propuestas iniciales. La etapa donde la creatividad tiene espacio para respirar.</p>
+        <h3 data-i18n="process-2-title">Concepto</h3>
+        <p data-i18n="process-2-p">Exploración visual, moodboards y propuestas iniciales. La etapa donde la creatividad tiene espacio para respirar.</p>
       </div>
       <div class="process-step reveal" style="transition-delay:.2s">
         <span class="process-num">03</span>
-        <h3>Refinamiento</h3>
-        <p>Iteración con feedback hasta llegar a la solución precisa. Cada revisión acerca el diseño a su versión final.</p>
+        <h3 data-i18n="process-3-title">Refinamiento</h3>
+        <p data-i18n="process-3-p">Iteración con feedback hasta llegar a la solución precisa. Cada revisión acerca el diseño a su versión final.</p>
       </div>
       <div class="process-step reveal" style="transition-delay:.3s">
         <span class="process-num">04</span>
-        <h3>Entrega</h3>
-        <p>Archivos organizados, formatos listos para usar y soporte post-entrega. El trabajo no termina al hacer clic en exportar.</p>
+        <h3 data-i18n="process-4-title">Entrega</h3>
+        <p data-i18n="process-4-p">Archivos organizados, formatos listos para usar y soporte post-entrega. El trabajo no termina al hacer clic en exportar.</p>
       </div>
     </div>
   </section>
@@ -990,19 +1065,19 @@
   <!-- ─── CONTACT ─── -->
   <section id="contact">
     <div class="contact-wrap reveal">
-      <span class="s-label">Contacto</span>
-      <h2 class="s-title">¿Tienes un proyecto <em>en mente</em>?</h2>
-      <p>Cuéntame tu idea. Estoy disponible para proyectos freelance y colaboraciones desde Jujuy, Argentina, para todo el mundo.</p>
+      <span class="s-label" data-i18n="contact-label">Contacto</span>
+      <h2 class="s-title" data-i18n="contact-title">¿Tienes un proyecto <em>en mente</em>?</h2>
+      <p data-i18n="contact-p">Cuéntame tu idea. Estoy disponible para proyectos freelance y colaboraciones desde Jujuy, Argentina, para todo el mundo.</p>
 
       <form class="contact-form" id="contact-form">
         <input type="hidden" name="access_key" value="2574f1c5-a55c-43a4-b73a-7b5637b5d111">
         <div class="form-row">
-          <input type="text"  id="fc-name"    name="name"    placeholder="Tu nombre"          required />
-          <input type="email" id="fc-email"   name="email"   placeholder="Tu email"           required />
+          <input type="text"  id="fc-name"    name="name"    data-i18n-ph="ph-name"    placeholder="Tu nombre"           required />
+          <input type="email" id="fc-email"   name="email"   data-i18n-ph="ph-email"   placeholder="Tu email"            required />
         </div>
-        <input  type="text"   id="fc-subject" name="subject" placeholder="Asunto del proyecto" />
-        <textarea             id="fc-msg"     name="message" placeholder="Contame de tu proyecto..."></textarea>
-        <button type="submit" class="btn-primary" style="border:none;cursor:pointer;justify-content:center;">Enviar mensaje →</button>
+        <input  type="text"   id="fc-subject" name="subject" data-i18n-ph="ph-subject" placeholder="Asunto del proyecto" />
+        <textarea             id="fc-msg"     name="message" data-i18n-ph="ph-msg"     placeholder="Contame de tu proyecto..."></textarea>
+        <button type="submit" id="form-submit" class="btn-primary" style="border:none;cursor:pointer;justify-content:center;" data-i18n="contact-submit">Enviar mensaje →</button>
       </form>
 
       <div class="contact-actions">
@@ -1023,20 +1098,20 @@
           <path d="M20 6L9 17l-5-5"/>
         </svg>
       </div>
-      <p class="modal-title">¡Mensaje enviado!</p>
-      <p class="modal-msg">Gracias por escribirme. Tu mensaje llegó con éxito.<br>Me pondré en contacto a la brevedad.</p>
-      <button class="modal-close" onclick="closeModal()">Cerrar ✕</button>
+      <p class="modal-title" data-i18n="modal-title">¡Mensaje enviado!</p>
+      <p class="modal-msg" data-i18n="modal-msg">Gracias por escribirme. Tu mensaje llegó con éxito.<br>Me pondré en contacto a la brevedad.</p>
+      <button class="modal-close" onclick="closeModal()" data-i18n="modal-close">Cerrar ✕</button>
     </div>
   </div>
 
   <!-- ─── FOOTER ─── -->
   <footer>
-    <p>© 2026 Damdesign · Diego Damian Mamani Rueda · Jujuy, Argentina</p>
+    <p data-i18n="footer-copy">© 2026 Damdesign · Diego Damian Mamani Rueda · Jujuy, Argentina</p>
     <div class="social-links">
-      <a href="https://www.behance.net/damianruedadg"                         target="_blank" rel="noopener">Behance</a>
-      <a href="https://www.instagram.com/damian.dmr"                          target="_blank" rel="noopener">Instagram</a>
-      <a href="https://www.linkedin.com/in/diego-damian-mamani-rueda"         target="_blank" rel="noopener">LinkedIn</a>
-      <a href="https://twitter.com/DamianRuedadg"                            target="_blank" rel="noopener">Twitter</a>
+      <a href="https://www.behance.net/damianruedadg"                       target="_blank" rel="noopener">Behance</a>
+      <a href="https://www.instagram.com/damian.dmr"                        target="_blank" rel="noopener">Instagram</a>
+      <a href="https://www.linkedin.com/in/diego-damian-mamani-rueda"       target="_blank" rel="noopener">LinkedIn</a>
+      <a href="https://twitter.com/DamianRuedadg"                          target="_blank" rel="noopener">Twitter</a>
     </div>
   </footer>
 
@@ -1123,32 +1198,30 @@
     });
     window.addEventListener('resize', () => goTo(current));
 
-    /* ── CONTACT FORM (Web3Forms + Fetch) ── */
+    /* ── CONTACT FORM ── */
     const contactForm = document.getElementById('contact-form');
-    const submitBtn   = contactForm.querySelector('button[type="submit"]');
+    const submitBtn   = document.getElementById('form-submit');
 
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
-
-      submitBtn.textContent = 'Enviando...';
+      const sending = currentLang === 'en' ? 'Sending...' : 'Enviando...';
+      const original = translations[currentLang]['contact-submit'];
+      submitBtn.textContent = sending;
       submitBtn.disabled = true;
-
       const data = new FormData(contactForm);
-
       try {
         const res    = await fetch('https://api.web3forms.com/submit', { method: 'POST', body: data });
         const result = await res.json();
-
         if (result.success) {
           contactForm.reset();
           document.getElementById('success-modal').classList.add('open');
         } else {
-          alert('Hubo un error al enviar. Por favor intentá de nuevo.');
+          alert(currentLang === 'en' ? 'Something went wrong. Please try again.' : 'Hubo un error al enviar. Por favor intentá de nuevo.');
         }
       } catch {
-        alert('Sin conexión. Revisá tu internet e intentá de nuevo.');
+        alert(currentLang === 'en' ? 'No connection. Check your internet and try again.' : 'Sin conexión. Revisá tu internet e intentá de nuevo.');
       } finally {
-        submitBtn.textContent = 'Enviar mensaje →';
+        submitBtn.innerHTML = original;
         submitBtn.disabled = false;
       }
     });
@@ -1165,6 +1238,194 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); obs.unobserve(e.target); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal, .rl, .rr').forEach(el => obs.observe(el));
+
+    /* ── DARK MODE ── */
+    const themeBtn = document.getElementById('theme-btn');
+    themeBtn.addEventListener('click', () => {
+      const isDark = document.documentElement.getAttribute('data-theme') === 'dark';
+      if (isDark) {
+        document.documentElement.removeAttribute('data-theme');
+        localStorage.setItem('theme', 'light');
+      } else {
+        document.documentElement.setAttribute('data-theme', 'dark');
+        localStorage.setItem('theme', 'dark');
+      }
+    });
+
+    /* ── TRANSLATIONS ── */
+    const translations = {
+      es: {
+        'loader-label':     'Cargando portafolio',
+        'nav-work':         'Trabajo',
+        'nav-about':        'Sobre mí',
+        'nav-services':     'Servicios',
+        'nav-process':      'Proceso',
+        'nav-contact':      'Contacto',
+        'hero-badge':       'Disponible para proyectos freelance · Jujuy, Argentina',
+        'hero-h1-1':        'Diseño que <em>habla</em>',
+        'hero-h1-2':        'antes de que leas.',
+        'hero-p':           'Soy Diego Damian, diseñador gráfico de Jujuy, Argentina.<br>Creo identidades de marca, interfaces UX/UI e ilustraciones<br>que conectan con las personas y hacen que tu marca sea imposible de ignorar.',
+        'hero-btn-work':    'Ver portafolio ↓',
+        'hero-btn-behance': 'Behance ↗',
+        'hero-scroll':      'Scroll',
+        'feat-pill':        'Identidad Visual',
+        'feat-label':       'Proyecto destacado',
+        'feat-h2':          'Procater.me — Identidad Visual & Web',
+        'feat-p':           'Sistema de <em style="font-style:normal;color:var(--accent);font-weight:600;">identidad visual completo</em> para Procater.me: logotipo, paleta, tipografía y manual de marca. Además se desarrolló el <em style="font-style:normal;color:var(--accent);font-weight:600;">diseño del sitio web</em>, llevando la identidad al entorno digital con coherencia total entre <em style="font-style:normal;color:var(--accent);font-weight:600;">marca y experiencia</em>.',
+        'feat-tag-1':       'Identidad Visual',
+        'feat-tag-2':       'Branding',
+        'feat-tag-3':       'Diseño Web',
+        'feat-tag-4':       'Logotipo',
+        'feat-cta':         'Ver proyecto completo ↗',
+        'stat-label-1':     'Views en Behance',
+        'stat-label-2':     'Apreciaciones',
+        'stat-label-3':     'Proyectos publicados',
+        'stat-label-4':     'Activo en Behance',
+        'carousel-label':   'Portafolio',
+        'carousel-title':   'Trabajos seleccionados',
+        'carousel-behance': 'Ver todos en Behance ↗',
+        'card-1-meta':      'Diseño de Interfaz · Digital',
+        'card-2-meta':      'Identidad Visual · Manual de Marca',
+        'card-3-title':     'Creación de Personaje',
+        'card-3-meta':      'Ilustración · Character Design',
+        'card-4-meta':      'Identidad Visual · Manual de Marca',
+        'card-5-title':     'Independencia y Unidad',
+        'card-5-meta':      'Diseño Editorial · Institucional',
+        'about-label':      'Sobre mí',
+        'about-title':      'Diseño con propósito, no solo con estética.',
+        'about-badge':      'años de carrera',
+        'about-p1':         'Soy Diego Damian, diseñador gráfico de San Salvador de Jujuy, Argentina. Trabajo profesionalmente desde 2020 en identidades visuales, diseño UX/UI e ilustración que generan impacto real.',
+        'about-p2':         'Cada proyecto arranca con una pregunta: ¿qué debe sentir la persona que lo ve? Esa respuesta guía cada decisión de color, forma y tipografía.',
+        'about-p3':         'Disponible para proyectos freelance y colaboraciones en todo el mundo.',
+        'services-label':   'Servicios',
+        'services-title':   'Lo que hago',
+        'service-1-title':  'Identidad & Manual de Marca',
+        'service-1-p':      'Sistemas de identidad visual completos con logotipo, paleta, tipografía y manual de marca. Como en Munatika Artesanías: marcas con carácter propio y coherencia total.',
+        'service-2-title':  'Diseño UX/UI',
+        'service-2-p':      'Interfaces digitales centradas en el usuario. Flujos, wireframes y prototipos que convierten la experiencia en algo natural e intuitivo, como en el proyecto Vidagift.',
+        'service-3-title':  'Ilustración & Character Design',
+        'service-3-p':      'Personajes e ilustraciones con identidad propia. Piezas que van más allá de lo funcional y generan una conexión emocional con quien las ve.',
+        'process-label':    'Mi proceso',
+        'process-title':    'Cómo trabajo',
+        'process-1-title':  'Descubrimiento',
+        'process-1-p':      'Brief profundo para entender el negocio, el público y los objetivos. Sin esta base, el diseño no tiene dirección.',
+        'process-2-title':  'Concepto',
+        'process-2-p':      'Exploración visual, moodboards y propuestas iniciales. La etapa donde la creatividad tiene espacio para respirar.',
+        'process-3-title':  'Refinamiento',
+        'process-3-p':      'Iteración con feedback hasta llegar a la solución precisa. Cada revisión acerca el diseño a su versión final.',
+        'process-4-title':  'Entrega',
+        'process-4-p':      'Archivos organizados, formatos listos para usar y soporte post-entrega. El trabajo no termina al hacer clic en exportar.',
+        'contact-label':    'Contacto',
+        'contact-title':    '¿Tienes un proyecto <em>en mente</em>?',
+        'contact-p':        'Cuéntame tu idea. Estoy disponible para proyectos freelance y colaboraciones desde Jujuy, Argentina, para todo el mundo.',
+        'ph-name':          'Tu nombre',
+        'ph-email':         'Tu email',
+        'ph-subject':       'Asunto del proyecto',
+        'ph-msg':           'Contame de tu proyecto...',
+        'contact-submit':   'Enviar mensaje →',
+        'modal-title':      '¡Mensaje enviado!',
+        'modal-msg':        'Gracias por escribirme. Tu mensaje llegó con éxito.<br>Me pondré en contacto a la brevedad.',
+        'modal-close':      'Cerrar ✕',
+        'footer-copy':      '© 2026 Damdesign · Diego Damian Mamani Rueda · Jujuy, Argentina'
+      },
+      en: {
+        'loader-label':     'Loading portfolio',
+        'nav-work':         'Work',
+        'nav-about':        'About',
+        'nav-services':     'Services',
+        'nav-process':      'Process',
+        'nav-contact':      'Contact',
+        'hero-badge':       'Available for freelance projects · Jujuy, Argentina',
+        'hero-h1-1':        'Design that <em>speaks</em>',
+        'hero-h1-2':        'before you read.',
+        'hero-p':           'I\'m Diego Damian, a graphic designer from Jujuy, Argentina.<br>I create brand identities, UX/UI interfaces, and illustrations<br>that connect with people and make your brand impossible to ignore.',
+        'hero-btn-work':    'View portfolio ↓',
+        'hero-btn-behance': 'Behance ↗',
+        'hero-scroll':      'Scroll',
+        'feat-pill':        'Visual Identity',
+        'feat-label':       'Featured project',
+        'feat-h2':          'Procater.me — Visual Identity & Web',
+        'feat-p':           'A complete <em style="font-style:normal;color:var(--accent);font-weight:600;">visual identity system</em> for Procater.me: logo, color palette, typography, and brand manual. The <em style="font-style:normal;color:var(--accent);font-weight:600;">website design</em> was also developed, bringing the identity into the digital space with full consistency between <em style="font-style:normal;color:var(--accent);font-weight:600;">brand and experience</em>.',
+        'feat-tag-1':       'Visual Identity',
+        'feat-tag-2':       'Branding',
+        'feat-tag-3':       'Web Design',
+        'feat-tag-4':       'Logo',
+        'feat-cta':         'View full project ↗',
+        'stat-label-1':     'Behance Views',
+        'stat-label-2':     'Appreciations',
+        'stat-label-3':     'Published projects',
+        'stat-label-4':     'Active on Behance',
+        'carousel-label':   'Portfolio',
+        'carousel-title':   'Selected works',
+        'carousel-behance': 'View all on Behance ↗',
+        'card-1-meta':      'Interface Design · Digital',
+        'card-2-meta':      'Visual Identity · Brand Manual',
+        'card-3-title':     'Character Creation',
+        'card-3-meta':      'Illustration · Character Design',
+        'card-4-meta':      'Visual Identity · Brand Manual',
+        'card-5-title':     'Independence and Unity',
+        'card-5-meta':      'Editorial Design · Institutional',
+        'about-label':      'About me',
+        'about-title':      'Design with purpose, not just aesthetics.',
+        'about-badge':      'years of experience',
+        'about-p1':         'I\'m Diego Damian, a graphic designer from San Salvador de Jujuy, Argentina. I\'ve been working professionally since 2020 in visual identities, UX/UI design, and illustration that create real impact.',
+        'about-p2':         'Every project starts with a question: what should the person looking at it feel? That answer drives every decision in color, shape, and typography.',
+        'about-p3':         'Available for freelance projects and collaborations worldwide.',
+        'services-label':   'Services',
+        'services-title':   'What I do',
+        'service-1-title':  'Brand Identity & Manual',
+        'service-1-p':      'Complete visual identity systems including logo, color palette, typography, and brand manual. Like Munatika Artesanías: brands with their own voice and total consistency.',
+        'service-2-title':  'UX/UI Design',
+        'service-2-p':      'User-centered digital interfaces. Flows, wireframes, and prototypes that turn the experience into something natural and intuitive, like the Vidagift project.',
+        'service-3-title':  'Illustration & Character Design',
+        'service-3-p':      'Characters and illustrations with their own personality. Pieces that go beyond function and create an emotional connection with the viewer.',
+        'process-label':    'My process',
+        'process-title':    'How I work',
+        'process-1-title':  'Discovery',
+        'process-1-p':      'A deep brief to understand the business, the audience, and the goals. Without this foundation, design has no direction.',
+        'process-2-title':  'Concept',
+        'process-2-p':      'Visual exploration, moodboards, and initial proposals. The stage where creativity has room to breathe.',
+        'process-3-title':  'Refinement',
+        'process-3-p':      'Iteration with feedback until we reach the precise solution. Each revision brings the design closer to its final version.',
+        'process-4-title':  'Delivery',
+        'process-4-p':      'Organized files, ready-to-use formats, and post-delivery support. The work doesn\'t end when you hit export.',
+        'contact-label':    'Contact',
+        'contact-title':    'Got a project <em>in mind</em>?',
+        'contact-p':        'Tell me about your idea. I\'m available for freelance projects and collaborations from Jujuy, Argentina, to the whole world.',
+        'ph-name':          'Your name',
+        'ph-email':         'Your email',
+        'ph-subject':       'Project subject',
+        'ph-msg':           'Tell me about your project...',
+        'contact-submit':   'Send message →',
+        'modal-title':      'Message sent!',
+        'modal-msg':        'Thanks for reaching out. Your message was sent successfully.<br>I\'ll get back to you shortly.',
+        'modal-close':      'Close ✕',
+        'footer-copy':      '© 2026 Damdesign · Diego Damian Mamani Rueda · Jujuy, Argentina'
+      }
+    };
+
+    let currentLang = localStorage.getItem('lang') || 'es';
+
+    function applyLang(lang) {
+      currentLang = lang;
+      document.documentElement.lang = lang;
+      localStorage.setItem('lang', lang);
+      document.querySelectorAll('[data-i18n]').forEach(el => {
+        const key = el.getAttribute('data-i18n');
+        if (translations[lang][key] !== undefined) el.innerHTML = translations[lang][key];
+      });
+      document.querySelectorAll('[data-i18n-ph]').forEach(el => {
+        const key = el.getAttribute('data-i18n-ph');
+        if (translations[lang][key] !== undefined) el.placeholder = translations[lang][key];
+      });
+      document.getElementById('lang-label').textContent = lang === 'es' ? 'EN' : 'ES';
+    }
+
+    document.getElementById('lang-btn').addEventListener('click', () => {
+      applyLang(currentLang === 'es' ? 'en' : 'es');
+    });
+
+    applyLang(currentLang);
   </script>
 
 </body>
