@@ -538,6 +538,74 @@
     }
     .service-card p { color: var(--gray); font-size: .88rem; line-height: 1.85; }
 
+    /* ─── VIDEO & MOTION ─── */
+    .video-section {
+      padding: 6rem 4rem;
+      border-top: 1px solid var(--border);
+    }
+    .video-subtitle {
+      color: var(--gray); font-size: 1rem; margin-top: .75rem;
+    }
+    .video-row {
+      display: flex; gap: 1.25rem; margin-top: 3rem;
+      justify-content: center;
+    }
+    .video-card {
+      position: relative; flex: 0 0 200px;
+      aspect-ratio: 9/16; border-radius: 20px; overflow: hidden;
+      background: linear-gradient(155deg, #181714 0%, #2c1a0a 100%);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; scroll-snap-align: start;
+      transition: transform .25s ease, box-shadow .25s ease;
+    }
+    .video-card:hover {
+      transform: scale(1.04);
+      box-shadow: 0 20px 50px rgba(0,0,0,.45);
+    }
+    /* orange glow corner accent */
+    .video-card::after {
+      content: ''; position: absolute; bottom: 0; right: 0;
+      width: 60%; height: 40%;
+      background: radial-gradient(ellipse at bottom right, rgba(232,87,42,.18) 0%, transparent 70%);
+      pointer-events: none;
+    }
+    .video-pill {
+      position: absolute; top: 1rem; left: 1rem; z-index: 1;
+      display: inline-flex; align-items: center;
+      background: rgba(255,255,255,.9); backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,.2);
+      padding: .35rem .85rem; border-radius: 100px;
+      font-size: .68rem; font-weight: 700; color: #111;
+      letter-spacing: .1em; text-transform: uppercase;
+      white-space: nowrap;
+    }
+    .video-play {
+      width: 54px; height: 54px; border-radius: 50%;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      transition: transform .25s ease, box-shadow .25s ease;
+      flex-shrink: 0; position: relative; z-index: 1;
+    }
+    .video-card:hover .video-play {
+      transform: scale(1.1);
+      box-shadow: 0 0 0 10px rgba(232,87,42,.2);
+    }
+
+    @media (max-width: 1024px) {
+      .video-section { padding: 4rem 0; }
+      .video-section > .s-label,
+      .video-section > .s-title,
+      .video-section > .video-subtitle { padding: 0 1.5rem; }
+      .video-row {
+        justify-content: flex-start;
+        overflow-x: auto; scroll-snap-type: x mandatory;
+        scrollbar-width: none; -ms-overflow-style: none;
+        padding: 0 1.5rem 1rem;
+      }
+      .video-row::-webkit-scrollbar { display: none; }
+      .video-card { flex: 0 0 180px; }
+    }
+
     /* ─── PROCESS ─── */
     .process-section { padding: 6rem 4rem; border-top: 1px solid var(--border); }
     .process-header { margin-bottom: 4rem; }
@@ -1050,6 +1118,51 @@
     </div>
   </section>
 
+  <!-- ─── VIDEO & MOTION ─── -->
+  <section class="video-section reveal" id="video">
+    <span class="s-label" data-i18n="video-label">Video & Motion</span>
+    <h2 class="s-title" data-i18n="video-title">Edición de Video y Animación</h2>
+    <p class="video-subtitle" data-i18n="video-subtitle">Reels, anuncios y motion graphics que detienen el scroll.</p>
+    <div class="video-row">
+
+      <div class="video-card" data-video-src="">
+        <span class="video-pill" data-i18n="vpill-1">Reel</span>
+        <div class="video-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+
+      <div class="video-card" data-video-src="">
+        <span class="video-pill" data-i18n="vpill-2">Anuncio</span>
+        <div class="video-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+
+      <div class="video-card" data-video-src="">
+        <span class="video-pill" data-i18n="vpill-3">Motion</span>
+        <div class="video-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+
+      <div class="video-card" data-video-src="">
+        <span class="video-pill" data-i18n="vpill-4">Edición</span>
+        <div class="video-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+
+      <div class="video-card" data-video-src="">
+        <span class="video-pill" data-i18n="vpill-5">Animación</span>
+        <div class="video-play">
+          <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
+        </div>
+      </div>
+
+    </div>
+  </section>
+
   <!-- ─── PROCESS ─── -->
   <section class="process-section" id="process">
     <div class="process-header reveal">
@@ -1332,6 +1445,14 @@
         'about-p3':         'Disponible para proyectos freelance y colaboraciones en todo el mundo.',
         'services-label':   'Servicios',
         'services-title':   'Lo que hago',
+        'video-label':      'Video & Motion',
+        'video-title':      'Edición de Video y Animación',
+        'video-subtitle':   'Reels, anuncios y motion graphics que detienen el scroll.',
+        'vpill-1':          'Reel',
+        'vpill-2':          'Anuncio',
+        'vpill-3':          'Motion',
+        'vpill-4':          'Edición',
+        'vpill-5':          'Animación',
         'service-1-title':  'Identidad & Manual de Marca',
         'service-1-p':      'Sistemas de identidad visual completos con logotipo, paleta, tipografía y manual de marca. Como en Munatika Artesanías: marcas con carácter propio y coherencia total.',
         'service-2-title':  'Diseño UX/UI',
@@ -1408,6 +1529,14 @@
         'about-p3':         'Available for freelance projects and collaborations worldwide.',
         'services-label':   'Services',
         'services-title':   'What I do',
+        'video-label':      'Video & Motion',
+        'video-title':      'Video Editing & Motion Graphics',
+        'video-subtitle':   'Reels, ads and motion graphics that stop the scroll.',
+        'vpill-1':          'Reel',
+        'vpill-2':          'Ad',
+        'vpill-3':          'Motion',
+        'vpill-4':          'Edit',
+        'vpill-5':          'Animation',
         'service-1-title':  'Brand Identity & Manual',
         'service-1-p':      'Complete visual identity systems including logo, color palette, typography, and brand manual. Like Munatika Artesanías: brands with their own voice and total consistency.',
         'service-2-title':  'UX/UI Design',
