@@ -616,29 +616,6 @@
       object-fit: cover; display: block;
     }
 
-    /* ─── VIDEO LIGHTBOX ─── */
-    .vl-overlay {
-      position: fixed; inset: 0; z-index: 600;
-      background: rgba(0,0,0,.92); backdrop-filter: blur(10px);
-      display: flex; align-items: center; justify-content: center;
-      opacity: 0; visibility: hidden;
-      transition: opacity .3s ease, visibility .3s ease;
-    }
-    .vl-overlay.open { opacity: 1; visibility: visible; }
-    .vl-video {
-      max-height: 88vh; max-width: min(90vw, 500px);
-      border-radius: 16px; outline: none;
-      box-shadow: 0 32px 80px rgba(0,0,0,.6);
-    }
-    .vl-close {
-      position: absolute; top: 1.25rem; right: 1.25rem;
-      width: 40px; height: 40px; border-radius: 50%;
-      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
-      color: #fff; font-size: 1rem; cursor: pointer;
-      display: flex; align-items: center; justify-content: center;
-      transition: background .2s;
-    }
-    .vl-close:hover { background: rgba(255,255,255,.22); }
 
     @media (max-width: 1024px) {
       .video-section { padding: 4rem 0; }
@@ -1367,12 +1344,6 @@
     </div>
   </div>
 
-  <!-- ─── VIDEO LIGHTBOX ─── -->
-  <div class="vl-overlay" id="video-lightbox" role="dialog" aria-modal="true">
-    <button class="vl-close" id="vl-close" aria-label="Cerrar">✕</button>
-    <video class="vl-video" id="vl-video" controls playsinline></video>
-  </div>
-
   <!-- ─── FOOTER ─── -->
   <footer>
     <p data-i18n="footer-copy">© 2026 Damdesign · Diego Damian Mamani Rueda · Jujuy, Argentina</p>
@@ -1771,35 +1742,23 @@
 
     applyLang(currentLang);
 
-    /* ── VIDEO LIGHTBOX ── */
-    const vlOverlay = document.getElementById('video-lightbox');
-    const vlVideo   = document.getElementById('vl-video');
-
-    function openVideoLightbox(src) {
-      vlVideo.src = src;
-      vlVideo.play();
-      vlOverlay.classList.add('open');
-      document.body.style.overflow = 'hidden';
-    }
-    function closeVideoLightbox() {
-      vlVideo.pause();
-      vlVideo.src = '';
-      vlOverlay.classList.remove('open');
-      document.body.style.overflow = '';
-    }
-
+    /* ── VIDEO IN-CARD PLAY ── */
     document.querySelectorAll('.video-card').forEach(card => {
+      const preview = card.querySelector('.vc-preview');
+      const playBtn = card.querySelector('.video-play');
+      if (!preview || !playBtn) return;
+
       card.addEventListener('click', () => {
-        const src = card.getAttribute('data-video-src');
-        if (src) openVideoLightbox(src);
+        if (preview.muted) {
+          preview.muted = false;
+          preview.controls = true;
+          playBtn.style.display = 'none';
+        } else {
+          preview.muted = true;
+          preview.controls = false;
+          playBtn.style.display = '';
+        }
       });
-    });
-    document.getElementById('vl-close').addEventListener('click', closeVideoLightbox);
-    vlOverlay.addEventListener('click', e => {
-      if (e.target === vlOverlay) closeVideoLightbox();
-    });
-    document.addEventListener('keydown', e => {
-      if (e.key === 'Escape') closeVideoLightbox();
     });
   </script>
 
