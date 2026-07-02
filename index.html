@@ -609,6 +609,36 @@
       transform: scale(1.1);
       box-shadow: 0 0 0 10px rgba(232,87,42,.2);
     }
+    /* video preview inside card */
+    .vc-preview {
+      position: absolute; inset: 0;
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+
+    /* ─── VIDEO LIGHTBOX ─── */
+    .vl-overlay {
+      position: fixed; inset: 0; z-index: 600;
+      background: rgba(0,0,0,.92); backdrop-filter: blur(10px);
+      display: flex; align-items: center; justify-content: center;
+      opacity: 0; visibility: hidden;
+      transition: opacity .3s ease, visibility .3s ease;
+    }
+    .vl-overlay.open { opacity: 1; visibility: visible; }
+    .vl-video {
+      max-height: 88vh; max-width: min(90vw, 500px);
+      border-radius: 16px; outline: none;
+      box-shadow: 0 32px 80px rgba(0,0,0,.6);
+    }
+    .vl-close {
+      position: absolute; top: 1.25rem; right: 1.25rem;
+      width: 40px; height: 40px; border-radius: 50%;
+      background: rgba(255,255,255,.12); border: 1px solid rgba(255,255,255,.18);
+      color: #fff; font-size: 1rem; cursor: pointer;
+      display: flex; align-items: center; justify-content: center;
+      transition: background .2s;
+    }
+    .vl-close:hover { background: rgba(255,255,255,.22); }
 
     @media (max-width: 1024px) {
       .video-section { padding: 4rem 0; }
@@ -1230,7 +1260,8 @@
         </div>
       </div>
 
-      <div class="video-card" data-video-src="https://assets.mixkit.co/videos/preview/mixkit-hands-of-a-designer-drawing-on-a-tablet-41605-large.mp4" data-aspect="horizontal">
+      <div class="video-card" data-video-src="asset/Circular Info Placa 1_2.mp4">
+        <video class="vc-preview" src="asset/Circular Info Placa 1_2.mp4" autoplay muted loop playsinline></video>
         <span class="video-pill" data-i18n="vpill-3">Motion</span>
         <div class="video-play">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
@@ -1334,6 +1365,12 @@
       <p class="modal-msg" data-i18n="modal-msg">Gracias por escribirme. Tu mensaje llegó con éxito.<br>Me pondré en contacto a la brevedad.</p>
       <button class="modal-close" onclick="closeModal()" data-i18n="modal-close">Cerrar ✕</button>
     </div>
+  </div>
+
+  <!-- ─── VIDEO LIGHTBOX ─── -->
+  <div class="vl-overlay" id="video-lightbox" role="dialog" aria-modal="true">
+    <button class="vl-close" id="vl-close" aria-label="Cerrar">✕</button>
+    <video class="vl-video" id="vl-video" controls playsinline></video>
   </div>
 
   <!-- ─── FOOTER ─── -->
@@ -1733,6 +1770,37 @@
     });
 
     applyLang(currentLang);
+
+    /* ── VIDEO LIGHTBOX ── */
+    const vlOverlay = document.getElementById('video-lightbox');
+    const vlVideo   = document.getElementById('vl-video');
+
+    function openVideoLightbox(src) {
+      vlVideo.src = src;
+      vlVideo.play();
+      vlOverlay.classList.add('open');
+      document.body.style.overflow = 'hidden';
+    }
+    function closeVideoLightbox() {
+      vlVideo.pause();
+      vlVideo.src = '';
+      vlOverlay.classList.remove('open');
+      document.body.style.overflow = '';
+    }
+
+    document.querySelectorAll('.video-card').forEach(card => {
+      card.addEventListener('click', () => {
+        const src = card.getAttribute('data-video-src');
+        if (src) openVideoLightbox(src);
+      });
+    });
+    document.getElementById('vl-close').addEventListener('click', closeVideoLightbox);
+    vlOverlay.addEventListener('click', e => {
+      if (e.target === vlOverlay) closeVideoLightbox();
+    });
+    document.addEventListener('keydown', e => {
+      if (e.key === 'Escape') closeVideoLightbox();
+    });
   </script>
 
 </body>
