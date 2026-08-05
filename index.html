@@ -2142,34 +2142,33 @@
     })();
 
     /* ── AURORA PARALLAX ── */
-    (function() {
-      const blobs = document.querySelectorAll('.aurora-blob');
-      const rings = document.querySelectorAll('.bg-ring');
+    window.addEventListener('DOMContentLoaded', function() {
+      const blobs  = Array.from(document.querySelectorAll('.aurora-blob'));
+      const rings  = Array.from(document.querySelectorAll('.bg-ring'));
       const bgGrid = document.getElementById('bg-grid');
-      let tx = 0, ty = 0, cx = 0, cy = 0;
-      const depths  = [.06, .045, .03, .018];
-      const rDepths = [.025, .018, .012, .02, .01];
+      const depths  = [80, 55, 35, 20];
+      const rDepths = [22, 16, 10, 18, 8];
+      let mx = 0, my = 0, cx = 0, cy = 0;
 
-      window.addEventListener('mousemove', e => {
-        tx = (e.clientX / window.innerWidth  - .5) * 2;
-        ty = (e.clientY / window.innerHeight - .5) * 2;
+      window.addEventListener('mousemove', function(e) {
+        mx = (e.clientX / window.innerWidth  - 0.5) * 2;
+        my = (e.clientY / window.innerHeight - 0.5) * 2;
       });
 
-      (function lerp() {
-        cx += (tx - cx) * .06;
-        cy += (ty - cy) * .06;
-        blobs.forEach((b, i) => {
-          const d = depths[i] || .02;
-          b.style.transform = `translate(${cx * d * 180}px, ${cy * d * 180}px)`;
+      function tick() {
+        cx += (mx - cx) * 0.06;
+        cy += (my - cy) * 0.06;
+        blobs.forEach(function(b, i) {
+          b.style.transform = 'translate(' + (cx * depths[i]) + 'px,' + (cy * depths[i]) + 'px)';
         });
-        rings.forEach((r, i) => {
-          const d = rDepths[i] || .008;
-          r.style.transform = `translate(${cx * d * 120}px, ${cy * d * 120}px)`;
+        rings.forEach(function(r, i) {
+          r.style.transform = 'translate(' + (cx * rDepths[i]) + 'px,' + (cy * rDepths[i]) + 'px)';
         });
-        if (bgGrid) bgGrid.style.transform = `translate(${cx * 18}px, ${cy * 18}px)`;
-        requestAnimationFrame(lerp);
-      })();
-    })();
+        if (bgGrid) bgGrid.style.transform = 'translate(' + (cx * 18) + 'px,' + (cy * 18) + 'px)';
+        requestAnimationFrame(tick);
+      }
+      tick();
+    });
 
     /* ── DIVIDER MOUSE TRACKING ── */
     document.querySelectorAll('.section-divider').forEach(div => {
