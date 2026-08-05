@@ -452,8 +452,31 @@
     .ticker-track span.sep { color: var(--accent); }
     @keyframes ticker { from{transform:translateX(0)} to{transform:translateX(-50%)} }
 
+    /* ─── SECTION DIVIDER ─── */
+    .section-divider {
+      position: relative; height: 1px; width: 100%;
+      background: linear-gradient(to right, transparent 0%, var(--border) 20%, var(--accent) 50%, var(--border) 80%, transparent 100%);
+      margin: 0;
+    }
+    .section-divider::before {
+      content: '';
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 6px; height: 6px; border-radius: 50%;
+      background: var(--accent);
+      box-shadow: 0 0 12px 4px rgba(232,87,42,.5);
+    }
+    .section-divider::after {
+      content: '';
+      position: absolute; left: 50%; top: 50%;
+      transform: translate(-50%, -50%);
+      width: 160px; height: 1px;
+      background: linear-gradient(to right, transparent, rgba(232,87,42,.6), transparent);
+      filter: blur(2px);
+    }
+
     /* ─── FEATURED WORK ─── */
-    .featured-section { padding: 7rem 4rem; border-bottom: 1px solid var(--border); }
+    .featured-section { padding: 7rem 4rem; }
     .featured-inner { display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
     .featured-visual {
       aspect-ratio: 4/3; border-radius: 20px; overflow: hidden;
@@ -495,7 +518,7 @@
     }
 
     /* ─── STATS ─── */
-    .stats { display: grid; grid-template-columns: repeat(4,1fr); border-bottom: 1px solid var(--border); }
+    .stats { display: grid; grid-template-columns: repeat(4,1fr); }
     .stat { padding: 3rem 2.5rem; border-right: 1px solid var(--border); }
     .stat:last-child { border-right: none; }
     .stat-num {
@@ -669,7 +692,6 @@
     /* ─── VIDEO & MOTION ─── */
     .video-section {
       padding: 6rem 4rem;
-      border-top: 1px solid var(--border);
     }
     .video-subtitle {
       color: var(--gray); font-size: 1rem; margin-top: .75rem;
@@ -790,7 +812,7 @@
     }
 
     /* ─── PROCESS ─── */
-    .process-section { padding: 6rem 4rem; border-top: 1px solid var(--border); }
+    .process-section { padding: 6rem 4rem; }
     .process-header { margin-bottom: 4rem; }
     .process-grid { display: grid; grid-template-columns: repeat(4,1fr); }
     .process-step {
@@ -1132,6 +1154,8 @@
     </div>
   </div>
 
+  <div class="section-divider" aria-hidden="true"></div>
+
   <!-- ─── FEATURED WORK ─── -->
   <section class="featured-section">
     <div class="featured-inner">
@@ -1155,6 +1179,8 @@
     </div>
   </section>
 
+  <div class="section-divider" aria-hidden="true"></div>
+
   <!-- ─── STATS ─── -->
   <div class="stats reveal" id="work">
     <div class="stat">
@@ -1174,6 +1200,8 @@
       <span class="stat-label" data-i18n="stat-label-4">Activo profesionalmente</span>
     </div>
   </div>
+
+  <div class="section-divider" aria-hidden="true"></div>
 
   <!-- ─── CAROUSEL ─── -->
   <section class="carousel-section">
@@ -1307,6 +1335,8 @@
     </div>
   </section>
 
+  <div class="section-divider" aria-hidden="true"></div>
+
   <!-- ─── ABOUT ─── -->
   <section class="section-wrap" id="about">
     <div class="about-grid">
@@ -1339,6 +1369,8 @@
       </div>
     </div>
   </section>
+
+  <div class="section-divider" aria-hidden="true"></div>
 
   <!-- ─── SERVICES ─── -->
   <section class="section-wrap services-bg" id="services">
@@ -1392,6 +1424,8 @@
 
     </div>
   </section>
+
+  <div class="section-divider" aria-hidden="true"></div>
 
   <!-- ─── VIDEO & MOTION ─── -->
   <section class="video-section reveal" id="video">
@@ -1456,6 +1490,8 @@
     </div>
   </section>
 
+  <div class="section-divider" aria-hidden="true"></div>
+
   <!-- ─── PROCESS ─── -->
   <section class="process-section" id="process">
     <div class="process-header reveal">
@@ -1485,6 +1521,8 @@
       </div>
     </div>
   </section>
+
+  <div class="section-divider" aria-hidden="true"></div>
 
   <!-- ─── CONTACT ─── -->
   <section id="contact">
