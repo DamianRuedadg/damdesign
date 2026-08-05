@@ -2025,11 +2025,12 @@
 
       function Particle() {
         this.reset = function() {
-          this.x  = Math.random() * W;
-          this.y  = Math.random() * H;
-          this.vx = (Math.random() - .5) * .4;
-          this.vy = (Math.random() - .5) * .4;
-          this.r  = Math.random() * 1.8 + .6;
+          this.x   = Math.random() * W;
+          this.y   = Math.random() * H;
+          this.bvx = (Math.random() - .5) * .5;
+          this.bvy = (Math.random() - .5) * .5;
+          this.vx  = 0; this.vy = 0;
+          this.r   = Math.random() * 1.8 + .6;
           this.alpha = Math.random() * .5 + .2;
         };
         this.reset();
@@ -2055,6 +2056,12 @@
         const baseAlpha = dark ? .55 : .35;
 
         particles.forEach(p => {
+          /* movimiento base siempre activo */
+          p.x += p.bvx; p.y += p.bvy;
+          if (p.x < 0 || p.x > W) p.bvx *= -1;
+          if (p.y < 0 || p.y > H) p.bvy *= -1;
+
+          /* atracción extra al pasar el mouse */
           const dx = mouse.x - p.x, dy = mouse.y - p.y;
           const dist = Math.sqrt(dx * dx + dy * dy);
           if (dist < 220) {
@@ -2062,11 +2069,9 @@
             p.vx += dx / dist * force * .55;
             p.vy += dy / dist * force * .55;
           }
-          /* speed cap */
           const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
           if (speed > 4) { p.vx = (p.vx / speed) * 4; p.vy = (p.vy / speed) * 4; }
-          /* friction — vuelven a velocidad base suavemente */
-          p.vx *= .94; p.vy *= .94;
+          p.vx *= .92; p.vy *= .92;
 
           p.x += p.vx; p.y += p.vy;
           if (p.x < 0 || p.x > W) p.vx *= -1;
