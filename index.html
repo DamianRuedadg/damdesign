@@ -102,82 +102,95 @@
 
     /* ─── BACKGROUND EFFECTS ─── */
 
-    /* grain texture overlay */
+    /* grain */
     body::after {
       content: '';
-      position: fixed; inset: 0; z-index: 2; pointer-events: none;
-      opacity: .045;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
-      background-size: 180px 180px;
+      position: fixed; inset: 0; z-index: 4; pointer-events: none;
+      opacity: .055;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+      background-size: 200px 200px;
     }
-    [data-theme="dark"] body::after { opacity: .07; }
+    [data-theme="dark"] body::after { opacity: .09; }
 
-    /* dot grid */
-    body::before {
-      content: '';
+    /* canvas partículas */
+    #bg-canvas {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image: radial-gradient(circle, rgba(0,0,0,.09) 1px, transparent 1px);
-      background-size: 32px 32px;
-    }
-    [data-theme="dark"] body::before {
-      background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px);
     }
 
-    /* orbs */
-    .bg-orb {
-      position: fixed; border-radius: 50%;
-      pointer-events: none; z-index: 0;
-      filter: blur(100px);
-      animation: orbFloat 18s ease-in-out infinite;
+    /* aurora blobs */
+    .bg-aurora {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      overflow: hidden;
     }
-    .bg-orb-1 {
-      width: 700px; height: 700px;
-      top: -200px; right: -150px;
-      background: radial-gradient(circle, rgba(232,87,42,.55) 0%, rgba(255,140,60,.2) 50%, transparent 70%);
-      opacity: .5; animation-duration: 22s;
+    .aurora-blob {
+      position: absolute; border-radius: 50%;
+      filter: blur(120px); mix-blend-mode: multiply;
+      animation: auroraMove 20s ease-in-out infinite;
     }
-    .bg-orb-2 {
-      width: 600px; height: 600px;
-      bottom: 5%; left: -150px;
-      background: radial-gradient(circle, rgba(232,87,42,.45) 0%, rgba(200,60,20,.15) 50%, transparent 70%);
-      opacity: .4; animation-duration: 28s; animation-delay: -10s;
-    }
-    .bg-orb-3 {
-      width: 450px; height: 450px;
-      top: 40%; right: 10%;
-      background: radial-gradient(circle, rgba(255,120,50,.3) 0%, transparent 65%);
-      opacity: .35; animation-duration: 35s; animation-delay: -18s;
-    }
-    .bg-orb-4 {
-      width: 350px; height: 350px;
-      top: 20%; left: 30%;
-      background: radial-gradient(circle, rgba(232,87,42,.18) 0%, transparent 65%);
-      opacity: .3; animation-duration: 40s; animation-delay: -5s;
-    }
-    [data-theme="dark"] .bg-orb-1 { opacity: .28; }
-    [data-theme="dark"] .bg-orb-2 { opacity: .22; }
-    [data-theme="dark"] .bg-orb-3 { opacity: .18; }
-    [data-theme="dark"] .bg-orb-4 { opacity: .14; }
+    [data-theme="dark"] .aurora-blob { mix-blend-mode: screen; }
 
-    @keyframes orbFloat {
-      0%,100% { transform: translateY(0px) scale(1) rotate(0deg); }
-      25%      { transform: translateY(-55px) scale(1.08) rotate(3deg); }
-      50%      { transform: translateY(-20px) scale(1.03) rotate(-2deg); }
-      75%      { transform: translateY(35px) scale(.95) rotate(1deg); }
+    .aurora-blob:nth-child(1) {
+      width: 80vw; height: 80vw; max-width: 900px; max-height: 900px;
+      top: -30%; left: -10%;
+      background: radial-gradient(circle, rgba(232,87,42,.7) 0%, rgba(255,160,80,.3) 40%, transparent 70%);
+      animation-duration: 18s;
+    }
+    .aurora-blob:nth-child(2) {
+      width: 70vw; height: 70vw; max-width: 800px; max-height: 800px;
+      bottom: -20%; right: -15%;
+      background: radial-gradient(circle, rgba(220,60,20,.6) 0%, rgba(255,100,50,.25) 40%, transparent 70%);
+      animation-duration: 24s; animation-delay: -8s;
+    }
+    .aurora-blob:nth-child(3) {
+      width: 50vw; height: 50vw; max-width: 600px; max-height: 600px;
+      top: 35%; left: 35%;
+      background: radial-gradient(circle, rgba(255,140,60,.4) 0%, transparent 65%);
+      animation-duration: 30s; animation-delay: -15s;
+    }
+    .aurora-blob:nth-child(4) {
+      width: 40vw; height: 40vw; max-width: 500px; max-height: 500px;
+      top: 10%; right: 5%;
+      background: radial-gradient(circle, rgba(180,50,10,.35) 0%, transparent 65%);
+      animation-duration: 22s; animation-delay: -4s;
     }
 
-    /* floating lines */
-    .bg-lines {
+    [data-theme="dark"] .aurora-blob:nth-child(1) { opacity: .35; }
+    [data-theme="dark"] .aurora-blob:nth-child(2) { opacity: .3; }
+    [data-theme="dark"] .aurora-blob:nth-child(3) { opacity: .25; }
+    [data-theme="dark"] .aurora-blob:nth-child(4) { opacity: .2; }
+
+    @keyframes auroraMove {
+      0%,100% { transform: translate(0,0) scale(1) rotate(0deg); }
+      25%      { transform: translate(4%,-6%) scale(1.1) rotate(5deg); }
+      50%      { transform: translate(-3%, 4%) scale(.92) rotate(-3deg); }
+      75%      { transform: translate(6%, 3%) scale(1.05) rotate(2deg); }
+    }
+
+    /* geometric rings */
+    .bg-rings {
       position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
     }
-    .bg-lines line {
-      stroke: var(--accent); stroke-width: .5; opacity: .08;
-      animation: lineDrift 20s linear infinite;
+    .bg-ring {
+      position: absolute; border-radius: 50%; border: 1px solid rgba(232,87,42,.12);
+      animation: ringPulse 8s ease-in-out infinite;
     }
-    [data-theme="dark"] .bg-lines line { opacity: .12; }
-    @keyframes lineDrift {
-      from { transform: translateY(-100px); }
-      to   { transform: translateY(100vh); }
+    [data-theme="dark"] .bg-ring { border-color: rgba(232,87,42,.18); }
+    .bg-ring:nth-child(1) { width: 500px; height: 500px; top: -100px; right: -100px; animation-delay: 0s; }
+    .bg-ring:nth-child(2) { width: 750px; height: 750px; top: -225px; right: -225px; animation-delay: -.5s; opacity: .7; }
+    .bg-ring:nth-child(3) { width: 1000px; height: 1000px; top: -350px; right: -350px; animation-delay: -1s; opacity: .4; }
+    .bg-ring:nth-child(4) { width: 400px; height: 400px; bottom: -80px; left: -80px; animation-delay: -3s; }
+    .bg-ring:nth-child(5) { width: 650px; height: 650px; bottom: -200px; left: -200px; animation-delay: -3.5s; opacity: .7; }
+
+    @keyframes ringPulse {
+      0%,100% { transform: scale(1); opacity: 1; }
+      50%      { transform: scale(1.04); opacity: .5; }
+    }
+
+    /* ensure content above */
+    nav, main, section, footer, .hero, .ticker,
+    .stats, .carousel-section, .featured-section,
+    .video-section, .process-section, #contact, #about {
+      position: relative; z-index: 5;
     }
 
     /* ensure content stays above bg effects */
@@ -989,17 +1002,20 @@
 <body class="loading">
 
   <!-- ─── BACKGROUND EFFECTS ─── -->
-  <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
-  <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
-  <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
-  <div class="bg-orb bg-orb-4" aria-hidden="true"></div>
-  <svg class="bg-lines" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
-    <line x1="15%" y1="-10%" x2="5%"  y2="110%" style="animation-delay:0s;animation-duration:22s"/>
-    <line x1="35%" y1="-10%" x2="30%" y2="110%" style="animation-delay:-7s;animation-duration:28s"/>
-    <line x1="60%" y1="-10%" x2="65%" y2="110%" style="animation-delay:-13s;animation-duration:18s"/>
-    <line x1="80%" y1="-10%" x2="88%" y2="110%" style="animation-delay:-4s;animation-duration:32s"/>
-    <line x1="92%" y1="-10%" x2="97%" y2="110%" style="animation-delay:-19s;animation-duration:24s"/>
-  </svg>
+  <canvas id="bg-canvas" aria-hidden="true"></canvas>
+  <div class="bg-aurora" aria-hidden="true">
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+    <div class="aurora-blob"></div>
+  </div>
+  <div class="bg-rings" aria-hidden="true">
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+    <div class="bg-ring"></div>
+  </div>
 
   <!-- ─── SCROLL PROGRESS BAR ─── -->
   <div class="scroll-progress-bar" id="scroll-progress"></div>
@@ -1937,6 +1953,84 @@
         }
       });
     });
+
+    /* ── PARTICLE CANVAS ── */
+    (function() {
+      const canvas = document.getElementById('bg-canvas');
+      if (!canvas) return;
+      const ctx = canvas.getContext('2d');
+      let W, H, particles = [], animId;
+      const ACCENT = [232, 87, 42];
+      const COUNT = 55;
+      const MAX_DIST = 140;
+
+      function isDark() { return document.documentElement.getAttribute('data-theme') === 'dark'; }
+
+      function resize() {
+        W = canvas.width  = window.innerWidth;
+        H = canvas.height = window.innerHeight;
+      }
+
+      function Particle() {
+        this.reset = function() {
+          this.x  = Math.random() * W;
+          this.y  = Math.random() * H;
+          this.vx = (Math.random() - .5) * .4;
+          this.vy = (Math.random() - .5) * .4;
+          this.r  = Math.random() * 1.8 + .6;
+          this.alpha = Math.random() * .5 + .2;
+        };
+        this.reset();
+        this.update = function() {
+          this.x += this.vx; this.y += this.vy;
+          if (this.x < 0 || this.x > W) this.vx *= -1;
+          if (this.y < 0 || this.y > H) this.vy *= -1;
+        };
+      }
+
+      function init() {
+        particles = [];
+        for (let i = 0; i < COUNT; i++) { const p = new Particle(); particles.push(p); }
+      }
+
+      function draw() {
+        ctx.clearRect(0, 0, W, H);
+        const dark = isDark();
+        const baseAlpha = dark ? .55 : .35;
+
+        particles.forEach(p => {
+          p.update();
+          ctx.beginPath();
+          ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
+          ctx.fillStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${p.alpha * baseAlpha * 2})`;
+          ctx.fill();
+        });
+
+        for (let i = 0; i < particles.length; i++) {
+          for (let j = i + 1; j < particles.length; j++) {
+            const a = particles[i], b = particles[j];
+            const dx = a.x - b.x, dy = a.y - b.y;
+            const dist = Math.sqrt(dx * dx + dy * dy);
+            if (dist < MAX_DIST) {
+              const opacity = (1 - dist / MAX_DIST) * baseAlpha * .6;
+              ctx.beginPath();
+              ctx.moveTo(a.x, a.y);
+              ctx.lineTo(b.x, b.y);
+              ctx.strokeStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${opacity})`;
+              ctx.lineWidth = .6;
+              ctx.stroke();
+            }
+          }
+        }
+        animId = requestAnimationFrame(draw);
+      }
+
+      window.addEventListener('resize', () => { resize(); init(); });
+      resize(); init(); draw();
+
+      const observer = new MutationObserver(() => {});
+      observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
   </script>
 
 </body>
