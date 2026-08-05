@@ -1,7 +1,8 @@
 {
   "permissions": {
     "allow": [
-      "Bash(git -C /Users/damianrueda/Claude/webdepruebas commit -m ' *)"
+      "Bash(git -C /Users/damianrueda/Claude/webdepruebas commit -m ' *)",
+      "Bash(git -C /Users/damianrueda/Claude/webdepruebas show --stat 7877dca)"
     ]
   }
 }
