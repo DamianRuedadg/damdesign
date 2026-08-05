@@ -100,6 +100,58 @@
       overflow-x: hidden;
     }
 
+    /* ─── BACKGROUND EFFECTS ─── */
+    body::before {
+      content: '';
+      position: fixed; inset: 0; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(0,0,0,.07) 1px, transparent 1px);
+      background-size: 28px 28px;
+      opacity: 1;
+      transition: opacity .4s;
+    }
+    [data-theme="dark"] body::before {
+      background-image: radial-gradient(circle, rgba(255,255,255,.055) 1px, transparent 1px);
+    }
+
+    .bg-orb {
+      position: fixed; border-radius: 50%;
+      pointer-events: none; z-index: 0;
+      filter: blur(80px); opacity: .35;
+      animation: orbFloat 18s ease-in-out infinite;
+    }
+    .bg-orb-1 {
+      width: 520px; height: 520px;
+      top: -120px; right: -100px;
+      background: radial-gradient(circle, rgba(232,87,42,.5) 0%, transparent 70%);
+      animation-duration: 20s;
+    }
+    .bg-orb-2 {
+      width: 400px; height: 400px;
+      bottom: 10%; left: -80px;
+      background: radial-gradient(circle, rgba(232,87,42,.35) 0%, transparent 70%);
+      animation-duration: 25s; animation-delay: -8s;
+    }
+    .bg-orb-3 {
+      width: 300px; height: 300px;
+      top: 55%; right: 15%;
+      background: radial-gradient(circle, rgba(232,87,42,.2) 0%, transparent 70%);
+      animation-duration: 30s; animation-delay: -14s;
+    }
+    [data-theme="dark"] .bg-orb { opacity: .22; }
+
+    @keyframes orbFloat {
+      0%,100% { transform: translateY(0) scale(1); }
+      33%      { transform: translateY(-40px) scale(1.06); }
+      66%      { transform: translateY(24px) scale(.96); }
+    }
+
+    /* ensure content stays above bg effects */
+    nav, main, section, footer, .hero, .ticker,
+    .stats, .carousel-section, .featured-section,
+    .video-section, .process-section, #contact, #about {
+      position: relative; z-index: 1;
+    }
+
     /* ─── CURSOR ─── */
     #cur, #cur-f {
       position: fixed; border-radius: 50%;
@@ -900,6 +952,11 @@
   </style>
 </head>
 <body class="loading">
+
+  <!-- ─── BACKGROUND ORBS ─── -->
+  <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
 
   <!-- ─── SCROLL PROGRESS BAR ─── -->
   <div class="scroll-progress-bar" id="scroll-progress"></div>
