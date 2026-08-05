@@ -2146,28 +2146,56 @@
       const blobs  = Array.from(document.querySelectorAll('.aurora-blob'));
       const rings  = Array.from(document.querySelectorAll('.bg-ring'));
       const bgGrid = document.getElementById('bg-grid');
-      const depths  = [80, 55, 35, 20];
-      const rDepths = [22, 16, 10, 18, 8];
-      let mx = 0, my = 0, cx = 0, cy = 0;
 
+      /* movimiento autónomo: cada blob tiene su propia órbita */
+      const orbits = [
+        { ax: 55, ay: 40, sx: 0.00018, sy: 0.00013, ox: 0, oy: Math.PI * 0.5 },
+        { ax: 40, ay: 55, sx: 0.00014, sy: 0.00019, ox: Math.PI, oy: 0 },
+        { ax: 30, ay: 25, sx: 0.00022, sy: 0.00016, ox: Math.PI * 0.3, oy: Math.PI * 0.7 },
+        { ax: 20, ay: 30, sx: 0.00016, sy: 0.00012, ox: Math.PI * 0.6, oy: Math.PI * 0.2 },
+      ];
+      const rOrbits = [
+        { ax: 18, ay: 12, sx: 0.00010, sy: 0.00008, ox: 0, oy: 0 },
+        { ax: 12, ay: 18, sx: 0.00008, sy: 0.00012, ox: Math.PI, oy: 0 },
+        { ax: 10, ay: 10, sx: 0.00014, sy: 0.00010, ox: 0.5, oy: 1.2 },
+        { ax: 15, ay: 10, sx: 0.00009, sy: 0.00013, ox: 2.1, oy: 0.8 },
+        { ax:  8, ay: 14, sx: 0.00012, sy: 0.00009, ox: 1.0, oy: 2.5 },
+      ];
+
+      /* mouse extra */
+      let mx = 0, my = 0, cmx = 0, cmy = 0;
       window.addEventListener('mousemove', function(e) {
         mx = (e.clientX / window.innerWidth  - 0.5) * 2;
         my = (e.clientY / window.innerHeight - 0.5) * 2;
       });
 
-      function tick() {
-        cx += (mx - cx) * 0.06;
-        cy += (my - cy) * 0.06;
+      function tick(t) {
+        cmx += (mx - cmx) * 0.06;
+        cmy += (my - cmy) * 0.06;
+
         blobs.forEach(function(b, i) {
-          b.style.transform = 'translate(' + (cx * depths[i]) + 'px,' + (cy * depths[i]) + 'px)';
+          const o = orbits[i];
+          const bx = Math.sin(t * o.sx + o.ox) * o.ax + cmx * 60;
+          const by = Math.cos(t * o.sy + o.oy) * o.ay + cmy * 60;
+          b.style.transform = 'translate(' + bx + 'px,' + by + 'px)';
         });
+
         rings.forEach(function(r, i) {
-          r.style.transform = 'translate(' + (cx * rDepths[i]) + 'px,' + (cy * rDepths[i]) + 'px)';
+          const o = rOrbits[i];
+          const rx = Math.sin(t * o.sx + o.ox) * o.ax + cmx * 24;
+          const ry = Math.cos(t * o.sy + o.oy) * o.ay + cmy * 24;
+          r.style.transform = 'translate(' + rx + 'px,' + ry + 'px)';
         });
-        if (bgGrid) bgGrid.style.transform = 'translate(' + (cx * 18) + 'px,' + (cy * 18) + 'px)';
+
+        if (bgGrid) {
+          const gx = Math.sin(t * 0.00008) * 10 + cmx * 18;
+          const gy = Math.cos(t * 0.00006) * 10 + cmy * 18;
+          bgGrid.style.transform = 'translate(' + gx + 'px,' + gy + 'px)';
+        }
+
         requestAnimationFrame(tick);
       }
-      tick();
+      requestAnimationFrame(tick);
     });
 
     /* ── DIVIDER MOUSE TRACKING ── */
