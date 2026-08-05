@@ -64,9 +64,6 @@
     [data-theme="dark"] .card-arrow svg path {
       stroke: var(--dark);
     }
-    [data-theme="dark"] .about-badge {
-      box-shadow: 0 8px 32px rgba(0,0,0,.45);
-    }
     [data-theme="dark"] .hero-deco {
       background: radial-gradient(circle,rgba(var(--accent-r),var(--accent-g),var(--accent-b),.18) 0%,transparent 65%);
     }
@@ -678,13 +675,14 @@
     .about-img img { width: 100%; height: 100%; object-fit: cover; display: block; }
     .about-badge {
       position: absolute; bottom: 1.5rem; right: -1.5rem;
-      background: var(--surface); border-radius: 14px;
+      background: var(--accent); border-radius: 14px;
       padding: 1.1rem 1.35rem;
-      box-shadow: 0 8px 32px rgba(0,0,0,.1); font-size: .8rem;
+      box-shadow: 0 8px 32px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.45); font-size: .8rem;
+      color: #fff;
     }
     .about-badge strong {
       font-family: 'Manrope', sans-serif; font-weight: 800;
-      font-size: 1.5rem; display: block; color: var(--accent); letter-spacing: -.03em;
+      font-size: 1.5rem; display: block; color: #fff; letter-spacing: -.03em;
     }
     .about-text .s-title { margin-bottom: 1.5rem; }
     .about-text p { color: var(--gray); line-height: 1.85; margin-bottom: 1.2rem; font-size: .95rem; }
