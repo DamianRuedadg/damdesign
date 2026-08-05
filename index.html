@@ -38,6 +38,7 @@
       --border:  rgba(0,0,0,0.08);
       --accent:  #e8572a;
       --accent2: #fff2ee;
+      --accent-r: 232; --accent-g: 87; --accent-b: 42;
     }
 
     /* ─── VIOLET ACCENT ─── */
@@ -51,10 +52,6 @@
       --accent2: #2e1a5e;
       --accent-r: 124; --accent-g: 58; --accent-b: 237;
     }
-    :root {
-      --accent-r: 232; --accent-g: 87; --accent-b: 42;
-    }
-    /* violet overrides for hardcoded rgba */
 
     /* ─── DARK MODE ─── */
     [data-theme="dark"] {
@@ -583,9 +580,10 @@
       cursor: pointer; display: flex; align-items: center; justify-content: center;
       transition: background .2s, border-color .2s, transform .2s;
     }
-    .carousel-btn:hover { background: var(--dark); border-color: var(--dark); transform: scale(1.05); }
-    .carousel-btn:hover svg path { stroke: #fff; }
-    .carousel-btn svg { pointer-events: none; }
+    .carousel-btn:hover { background: var(--accent); border-color: var(--accent); transform: scale(1.05); }
+    .carousel-btn:hover svg path { stroke: #fff !important; }
+    .carousel-btn svg { pointer-events: none; color: var(--dark); transition: color .2s; }
+    .carousel-btn:hover svg { color: #fff; }
     .carousel-btn svg path { transition: stroke .2s; }
     .behance-link {
       display: inline-flex; align-items: center; gap: .5rem;
@@ -1255,12 +1253,12 @@
       <div class="carousel-controls">
         <button class="carousel-btn" id="prev" aria-label="Anterior">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M15 18l-6-6 6-6" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M15 18l-6-6 6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <button class="carousel-btn" id="next" aria-label="Siguiente">
           <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-            <path d="M9 18l6-6-6-6" stroke="#0d0d0d" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+            <path d="M9 18l6-6-6-6" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
           </svg>
         </button>
         <a href="https://www.behance.net/damianruedadg" target="_blank" rel="noopener noreferrer" class="behance-link" data-i18n="carousel-behance">Ver todos en Behance ↗</a>
