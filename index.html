@@ -129,50 +129,53 @@
     .bg-aurora {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
     }
+    .aurora-wrap {
+      position: absolute; will-change: transform;
+    }
     .aurora-blob {
-      position: absolute; border-radius: 50%;
+      border-radius: 50%;
       filter: blur(120px); mix-blend-mode: multiply;
-      --mx: 0px; --my: 0px;
       animation: auroraFloat var(--dur, 20s) ease-in-out infinite;
     }
     @keyframes auroraFloat {
-      0%   { transform: translate(calc(0px   + var(--mx)), calc(0px   + var(--my))); }
-      25%  { transform: translate(calc(50px  + var(--mx)), calc(-40px + var(--my))); }
-      50%  { transform: translate(calc(-30px + var(--mx)), calc(45px  + var(--my))); }
-      75%  { transform: translate(calc(35px  + var(--mx)), calc(25px  + var(--my))); }
-      100% { transform: translate(calc(0px   + var(--mx)), calc(0px   + var(--my))); }
+      0%   { transform: translate(0px,   0px); }
+      25%  { transform: translate(60px,  -50px); }
+      50%  { transform: translate(-40px,  55px); }
+      75%  { transform: translate(45px,   30px); }
+      100% { transform: translate(0px,   0px); }
     }
     [data-theme="dark"] .aurora-blob { mix-blend-mode: screen; }
 
-    .aurora-blob:nth-child(1) {
+
+    .aurora-wrap:nth-child(1) { top: -120px; right: -100px; }
+    .aurora-wrap:nth-child(2) { bottom: -100px; left: -100px; }
+    .aurora-wrap:nth-child(3) { top: 40%; right: 10%; }
+    .aurora-wrap:nth-child(4) { top: 20%; left: 30%; }
+
+    .aurora-wrap:nth-child(1) .aurora-blob {
       width: 420px; height: 420px; opacity: .35; --dur: 18s;
-      top: -120px; right: -100px;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.6) 0%, rgba(255,160,80,.2) 50%, transparent 70%);
-      animation-delay: 0s;
     }
-    .aurora-blob:nth-child(2) {
+    .aurora-wrap:nth-child(2) .aurora-blob {
       width: 360px; height: 360px; opacity: .28; --dur: 25s;
-      bottom: -100px; left: -100px;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.55) 0%, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.18) 50%, transparent 70%);
       animation-delay: -8s;
     }
-    .aurora-blob:nth-child(3) {
+    .aurora-wrap:nth-child(3) .aurora-blob {
       width: 280px; height: 280px; opacity: .2; --dur: 30s;
-      top: 40%; right: 10%;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.4) 0%, transparent 65%);
       animation-delay: -15s;
     }
-    .aurora-blob:nth-child(4) {
+    .aurora-wrap:nth-child(4) .aurora-blob {
       width: 220px; height: 220px; opacity: .18; --dur: 22s;
-      top: 20%; left: 30%;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.35) 0%, transparent 65%);
       animation-delay: -4s;
     }
 
-    [data-theme="dark"] .aurora-blob:nth-child(1) { opacity: .2; }
-    [data-theme="dark"] .aurora-blob:nth-child(2) { opacity: .16; }
-    [data-theme="dark"] .aurora-blob:nth-child(3) { opacity: .12; }
-    [data-theme="dark"] .aurora-blob:nth-child(4) { opacity: .1; }
+    [data-theme="dark"] .aurora-wrap:nth-child(1) .aurora-blob { opacity: .2; }
+    [data-theme="dark"] .aurora-wrap:nth-child(2) .aurora-blob { opacity: .16; }
+    [data-theme="dark"] .aurora-wrap:nth-child(3) .aurora-blob { opacity: .12; }
+    [data-theme="dark"] .aurora-wrap:nth-child(4) .aurora-blob { opacity: .1; }
 
 
     /* geometric rings */
@@ -1069,10 +1072,10 @@
   <div id="bg-grid" aria-hidden="true"></div>
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
   <div class="bg-aurora" aria-hidden="true">
-    <div class="aurora-blob"></div>
-    <div class="aurora-blob"></div>
-    <div class="aurora-blob"></div>
-    <div class="aurora-blob"></div>
+    <div class="aurora-wrap"><div class="aurora-blob"></div></div>
+    <div class="aurora-wrap"><div class="aurora-blob"></div></div>
+    <div class="aurora-wrap"><div class="aurora-blob"></div></div>
+    <div class="aurora-wrap"><div class="aurora-blob"></div></div>
   </div>
   <div class="bg-rings" aria-hidden="true">
     <div class="bg-ring"></div>
@@ -2149,32 +2152,32 @@
       observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     })();
 
-    /* ── AURORA PARALLAX (mouse only — CSS handles auto movement) ── */
+    /* ── MOUSE PARALLAX — wrappers se mueven con mouse, CSS anima los blobs internos ── */
     (function(){
-      var blobs  = document.querySelectorAll('.aurora-blob');
+      var wraps  = document.querySelectorAll('.aurora-wrap');
       var rings  = document.querySelectorAll('.bg-ring');
       var bgGrid = document.getElementById('bg-grid');
-      var rDepths = [22,16,10,18,8];
-      var mx=0,my=0,cmx=0,cmy=0;
+      var wDepths = [55, 40, 30, 20];
+      var rDepths = [22, 16, 10, 18, 8];
+      var mx=0, my=0, cmx=0, cmy=0;
 
-      document.addEventListener('mousemove',function(e){
-        mx=(e.clientX/innerWidth-0.5)*2;
-        my=(e.clientY/innerHeight-0.5)*2;
+      document.addEventListener('mousemove', function(e){
+        mx = (e.clientX / innerWidth  - 0.5) * 2;
+        my = (e.clientY / innerHeight - 0.5) * 2;
       });
 
       function tick(){
-        cmx+=(mx-cmx)*0.06; cmy+=(my-cmy)*0.06;
-        /* blobs: mouse offset via CSS vars, CSS animation maneja movimiento base */
-        for(var i=0;i<blobs.length;i++){
-          blobs[i].style.setProperty('--mx', (cmx*55)+'px');
-          blobs[i].style.setProperty('--my', (cmy*55)+'px');
+        cmx += (mx - cmx) * 0.06;
+        cmy += (my - cmy) * 0.06;
+        for(var i=0; i<wraps.length; i++){
+          var d = wDepths[i] || 20;
+          wraps[i].style.transform = 'translate('+(cmx*d)+'px,'+(cmy*d)+'px)';
         }
-        /* rings: sin CSS animation, JS maneja todo */
-        for(var j=0;j<rings.length;j++){
-          var d=rDepths[j]||10;
-          rings[j].style.transform='translate('+(cmx*d)+'px,'+(cmy*d)+'px)';
+        for(var j=0; j<rings.length; j++){
+          var r = rDepths[j] || 10;
+          rings[j].style.transform = 'translate('+(cmx*r)+'px,'+(cmy*r)+'px)';
         }
-        if(bgGrid) bgGrid.style.transform='translate('+(cmx*18)+'px,'+(cmy*18)+'px)';
+        if(bgGrid) bgGrid.style.transform = 'translate('+(cmx*18)+'px,'+(cmy*18)+'px)';
         requestAnimationFrame(tick);
       }
       tick();
