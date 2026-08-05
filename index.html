@@ -565,10 +565,33 @@
     .video-subtitle {
       color: var(--gray); font-size: 1rem; margin-top: .75rem;
     }
-    .video-row {
-      display: flex; gap: 1.25rem; margin-top: 3rem;
-      justify-content: center;
+    .video-carousel-wrap {
+      position: relative; margin-top: 3rem;
     }
+    .video-row {
+      display: flex; gap: 1.25rem;
+      overflow-x: auto; scroll-snap-type: x mandatory;
+      scrollbar-width: none; -ms-overflow-style: none;
+      padding: 0.5rem 2rem 1rem;
+      scroll-behavior: smooth;
+    }
+    .video-row::-webkit-scrollbar { display: none; }
+    .vc-arrow {
+      position: absolute; top: 50%; transform: translateY(-50%);
+      width: 48px; height: 48px; border-radius: 50%;
+      background: var(--surface); border: 1px solid var(--border);
+      box-shadow: 0 4px 20px rgba(0,0,0,.12);
+      display: flex; align-items: center; justify-content: center;
+      cursor: pointer; z-index: 10;
+      transition: background .2s, box-shadow .2s, opacity .2s;
+      opacity: 0; pointer-events: none;
+    }
+    .vc-arrow svg { color: var(--dark); }
+    .vc-arrow:hover { background: var(--accent); box-shadow: 0 6px 24px rgba(232,87,42,.3); }
+    .vc-arrow:hover svg { color: #fff; }
+    .vc-arrow.prev { left: -24px; }
+    .vc-arrow.next { right: -24px; }
+    .vc-arrow.visible { opacity: 1; pointer-events: auto; }
     .video-card {
       position: relative; flex: 0 0 360px;
       aspect-ratio: 9/16; border-radius: 20px; overflow: hidden;
@@ -622,6 +645,8 @@
       .video-section > .s-label,
       .video-section > .s-title,
       .video-section > .video-subtitle { padding: 0 1.5rem; }
+      .video-carousel-wrap { margin-top: 2rem; }
+      .vc-arrow { display: none; }
       .video-row {
         justify-content: flex-start;
         overflow-x: auto; scroll-snap-type: x mandatory;
@@ -1221,7 +1246,14 @@
     <span class="s-label" data-i18n="video-label">Video & Motion</span>
     <h2 class="s-title" data-i18n="video-title">Edición de Video y Animación</h2>
     <p class="video-subtitle" data-i18n="video-subtitle">Reels, anuncios y motion graphics que detienen el scroll.</p>
-    <div class="video-row">
+    <div class="video-carousel-wrap">
+    <button class="vc-arrow prev" id="vcPrev" aria-label="Anterior">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+    </button>
+    <button class="vc-arrow next" id="vcNext" aria-label="Siguiente">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+    </button>
+    <div class="video-row" id="videoRow">
 
       <div class="video-card" data-video-src="asset/IP VENTAS DEPTO.mp4">
         <video class="vc-preview" src="asset/IP VENTAS DEPTO.mp4" autoplay muted loop playsinline></video>
@@ -1263,6 +1295,7 @@
         </div>
       </div>
 
+    </div>
     </div>
   </section>
 
@@ -1531,6 +1564,32 @@
         }
       });
     });
+
+    /* ── VIDEO CAROUSEL ARROWS ── */
+    (function() {
+      const row = document.getElementById('videoRow');
+      const prevBtn = document.getElementById('vcPrev');
+      const nextBtn = document.getElementById('vcNext');
+      if (!row || !prevBtn || !nextBtn) return;
+
+      function updateArrows() {
+        const canScrollLeft = row.scrollLeft > 10;
+        const canScrollRight = row.scrollLeft < row.scrollWidth - row.clientWidth - 10;
+        prevBtn.classList.toggle('visible', canScrollLeft);
+        nextBtn.classList.toggle('visible', canScrollRight);
+      }
+
+      const cardWidth = () => {
+        const card = row.querySelector('.video-card');
+        return card ? card.offsetWidth + 20 : 380;
+      };
+
+      prevBtn.addEventListener('click', () => { row.scrollBy({ left: -cardWidth(), behavior: 'smooth' }); });
+      nextBtn.addEventListener('click', () => { row.scrollBy({ left: cardWidth(), behavior: 'smooth' }); });
+      row.addEventListener('scroll', updateArrows, { passive: true });
+      window.addEventListener('resize', updateArrows);
+      updateArrows();
+    })();
 
     /* ── SCROLL REVEAL ── */
     const obs = new IntersectionObserver(entries => {
