@@ -44,10 +44,63 @@
     [data-accent="violet"] {
       --accent:  #7C3AED;
       --accent2: #ede9fe;
+      --accent-r: 124; --accent-g: 58; --accent-b: 237;
     }
     [data-theme="dark"][data-accent="violet"] {
       --accent:  #7C3AED;
       --accent2: #2e1a5e;
+      --accent-r: 124; --accent-g: 58; --accent-b: 237;
+    }
+    :root {
+      --accent-r: 232; --accent-g: 87; --accent-b: 42;
+    }
+    /* violet overrides for hardcoded rgba */
+    [data-accent="violet"] .hero-deco {
+      background: radial-gradient(circle,rgba(124,58,237,.18) 0%,transparent 65%);
+    }
+    [data-accent="violet"] .hero-deco-ring {
+      border-color: rgba(124,58,237,.12);
+    }
+    [data-accent="violet"] .aurora-blob:nth-child(1) {
+      background: radial-gradient(circle, rgba(124,58,237,.6) 0%, rgba(160,100,255,.2) 50%, transparent 70%);
+    }
+    [data-accent="violet"] .aurora-blob:nth-child(2) {
+      background: radial-gradient(circle, rgba(100,40,210,.55) 0%, rgba(140,80,255,.18) 50%, transparent 70%);
+    }
+    [data-accent="violet"] .aurora-blob:nth-child(3) {
+      background: radial-gradient(circle, rgba(140,80,255,.4) 0%, transparent 65%);
+    }
+    [data-accent="violet"] .aurora-blob:nth-child(4) {
+      background: radial-gradient(circle, rgba(90,30,180,.35) 0%, transparent 65%);
+    }
+    [data-accent="violet"] .bg-ring {
+      border-color: rgba(124,58,237,.12);
+    }
+    [data-theme="dark"][data-accent="violet"] .bg-ring {
+      border-color: rgba(124,58,237,.18);
+    }
+    [data-accent="violet"] .section-divider {
+      background: linear-gradient(to right, transparent 0%, var(--border) 20%, #7C3AED 50%, var(--border) 80%, transparent 100%);
+    }
+    [data-accent="violet"] .section-divider::before {
+      background: #7C3AED;
+      box-shadow: 0 0 12px 4px rgba(124,58,237,.5);
+    }
+    [data-accent="violet"] .section-divider::after {
+      background: linear-gradient(to right, transparent, rgba(124,58,237,.6), transparent);
+    }
+    [data-accent="violet"] .carousel-card:hover {
+      box-shadow: 0 28px 60px rgba(124,58,237,.2), 0 8px 24px rgba(0,0,0,.08);
+      outline-color: rgba(124,58,237,.25);
+    }
+    [data-accent="violet"] .video-card::after {
+      background: radial-gradient(ellipse at bottom right, rgba(124,58,237,.18) 0%, transparent 70%);
+    }
+    [data-accent="violet"] .video-card:hover .video-play {
+      box-shadow: 0 0 0 10px rgba(124,58,237,.2);
+    }
+    [data-accent="violet"] body.ch #cur-f {
+      border-color: rgba(124,58,237,.6);
     }
 
     /* ─── DARK MODE ─── */
@@ -2052,7 +2105,14 @@
       if (!canvas) return;
       const ctx = canvas.getContext('2d');
       let W, H, particles = [], animId;
-      const ACCENT = [232, 87, 42];
+      function getAccent() {
+        const s = getComputedStyle(document.documentElement);
+        return [
+          parseInt(s.getPropertyValue('--accent-r').trim()) || 232,
+          parseInt(s.getPropertyValue('--accent-g').trim()) || 87,
+          parseInt(s.getPropertyValue('--accent-b').trim()) || 42,
+        ];
+      }
       const COUNT = 120;
       const MAX_DIST = 140;
 
@@ -2119,7 +2179,8 @@
 
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
-          ctx.fillStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${p.alpha * baseAlpha * 2})`;
+          const AC = getAccent();
+          ctx.fillStyle = `rgba(${AC[0]},${AC[1]},${AC[2]},${p.alpha * baseAlpha * 2})`;
           ctx.fill();
         });
 
@@ -2133,7 +2194,7 @@
               ctx.beginPath();
               ctx.moveTo(a.x, a.y);
               ctx.lineTo(b.x, b.y);
-              ctx.strokeStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${opacity})`;
+              ctx.strokeStyle = `rgba(${AC[0]},${AC[1]},${AC[2]},${opacity})`;
               ctx.lineWidth = .6;
               ctx.stroke();
             }
