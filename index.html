@@ -101,55 +101,90 @@
     }
 
     /* ─── BACKGROUND EFFECTS ─── */
+
+    /* grain texture overlay */
+    body::after {
+      content: '';
+      position: fixed; inset: 0; z-index: 2; pointer-events: none;
+      opacity: .045;
+      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)'/%3E%3C/svg%3E");
+      background-size: 180px 180px;
+    }
+    [data-theme="dark"] body::after { opacity: .07; }
+
+    /* dot grid */
     body::before {
       content: '';
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
-      background-image: radial-gradient(circle, rgba(0,0,0,.07) 1px, transparent 1px);
-      background-size: 28px 28px;
-      opacity: 1;
-      transition: opacity .4s;
+      background-image: radial-gradient(circle, rgba(0,0,0,.09) 1px, transparent 1px);
+      background-size: 32px 32px;
     }
     [data-theme="dark"] body::before {
-      background-image: radial-gradient(circle, rgba(255,255,255,.055) 1px, transparent 1px);
+      background-image: radial-gradient(circle, rgba(255,255,255,.07) 1px, transparent 1px);
     }
 
+    /* orbs */
     .bg-orb {
       position: fixed; border-radius: 50%;
       pointer-events: none; z-index: 0;
-      filter: blur(80px); opacity: .35;
+      filter: blur(100px);
       animation: orbFloat 18s ease-in-out infinite;
     }
     .bg-orb-1 {
-      width: 520px; height: 520px;
-      top: -120px; right: -100px;
-      background: radial-gradient(circle, rgba(232,87,42,.5) 0%, transparent 70%);
-      animation-duration: 20s;
+      width: 700px; height: 700px;
+      top: -200px; right: -150px;
+      background: radial-gradient(circle, rgba(232,87,42,.55) 0%, rgba(255,140,60,.2) 50%, transparent 70%);
+      opacity: .5; animation-duration: 22s;
     }
     .bg-orb-2 {
-      width: 400px; height: 400px;
-      bottom: 10%; left: -80px;
-      background: radial-gradient(circle, rgba(232,87,42,.35) 0%, transparent 70%);
-      animation-duration: 25s; animation-delay: -8s;
+      width: 600px; height: 600px;
+      bottom: 5%; left: -150px;
+      background: radial-gradient(circle, rgba(232,87,42,.45) 0%, rgba(200,60,20,.15) 50%, transparent 70%);
+      opacity: .4; animation-duration: 28s; animation-delay: -10s;
     }
     .bg-orb-3 {
-      width: 300px; height: 300px;
-      top: 55%; right: 15%;
-      background: radial-gradient(circle, rgba(232,87,42,.2) 0%, transparent 70%);
-      animation-duration: 30s; animation-delay: -14s;
+      width: 450px; height: 450px;
+      top: 40%; right: 10%;
+      background: radial-gradient(circle, rgba(255,120,50,.3) 0%, transparent 65%);
+      opacity: .35; animation-duration: 35s; animation-delay: -18s;
     }
-    [data-theme="dark"] .bg-orb { opacity: .22; }
+    .bg-orb-4 {
+      width: 350px; height: 350px;
+      top: 20%; left: 30%;
+      background: radial-gradient(circle, rgba(232,87,42,.18) 0%, transparent 65%);
+      opacity: .3; animation-duration: 40s; animation-delay: -5s;
+    }
+    [data-theme="dark"] .bg-orb-1 { opacity: .28; }
+    [data-theme="dark"] .bg-orb-2 { opacity: .22; }
+    [data-theme="dark"] .bg-orb-3 { opacity: .18; }
+    [data-theme="dark"] .bg-orb-4 { opacity: .14; }
 
     @keyframes orbFloat {
-      0%,100% { transform: translateY(0) scale(1); }
-      33%      { transform: translateY(-40px) scale(1.06); }
-      66%      { transform: translateY(24px) scale(.96); }
+      0%,100% { transform: translateY(0px) scale(1) rotate(0deg); }
+      25%      { transform: translateY(-55px) scale(1.08) rotate(3deg); }
+      50%      { transform: translateY(-20px) scale(1.03) rotate(-2deg); }
+      75%      { transform: translateY(35px) scale(.95) rotate(1deg); }
+    }
+
+    /* floating lines */
+    .bg-lines {
+      position: fixed; inset: 0; z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    .bg-lines line {
+      stroke: var(--accent); stroke-width: .5; opacity: .08;
+      animation: lineDrift 20s linear infinite;
+    }
+    [data-theme="dark"] .bg-lines line { opacity: .12; }
+    @keyframes lineDrift {
+      from { transform: translateY(-100px); }
+      to   { transform: translateY(100vh); }
     }
 
     /* ensure content stays above bg effects */
     nav, main, section, footer, .hero, .ticker,
     .stats, .carousel-section, .featured-section,
     .video-section, .process-section, #contact, #about {
-      position: relative; z-index: 1;
+      position: relative; z-index: 3;
     }
 
     /* ─── CURSOR ─── */
@@ -953,10 +988,18 @@
 </head>
 <body class="loading">
 
-  <!-- ─── BACKGROUND ORBS ─── -->
+  <!-- ─── BACKGROUND EFFECTS ─── -->
   <div class="bg-orb bg-orb-1" aria-hidden="true"></div>
   <div class="bg-orb bg-orb-2" aria-hidden="true"></div>
   <div class="bg-orb bg-orb-3" aria-hidden="true"></div>
+  <div class="bg-orb bg-orb-4" aria-hidden="true"></div>
+  <svg class="bg-lines" aria-hidden="true" xmlns="http://www.w3.org/2000/svg">
+    <line x1="15%" y1="-10%" x2="5%"  y2="110%" style="animation-delay:0s;animation-duration:22s"/>
+    <line x1="35%" y1="-10%" x2="30%" y2="110%" style="animation-delay:-7s;animation-duration:28s"/>
+    <line x1="60%" y1="-10%" x2="65%" y2="110%" style="animation-delay:-13s;animation-duration:18s"/>
+    <line x1="80%" y1="-10%" x2="88%" y2="110%" style="animation-delay:-4s;animation-duration:32s"/>
+    <line x1="92%" y1="-10%" x2="97%" y2="110%" style="animation-delay:-19s;animation-duration:24s"/>
+  </svg>
 
   <!-- ─── SCROLL PROGRESS BAR ─── -->
   <div class="scroll-progress-bar" id="scroll-progress"></div>
