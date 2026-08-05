@@ -1338,6 +1338,7 @@
 
       <form class="contact-form" id="contact-form">
         <input type="hidden" name="access_key" value="2574f1c5-a55c-43a4-b73a-7b5637b5d111">
+        <input type="checkbox" name="botcheck" style="display:none" tabindex="-1" autocomplete="off">
         <div class="form-row">
           <input type="text"  id="fc-name"    name="name"    data-i18n-ph="ph-name"    placeholder="Tu nombre"           required />
           <input type="email" id="fc-email"   name="email"   data-i18n-ph="ph-email"   placeholder="Tu email"            required />
@@ -1491,9 +1492,16 @@
     /* ── CONTACT FORM ── */
     const contactForm = document.getElementById('contact-form');
     const submitBtn   = document.getElementById('form-submit');
+    let lastSubmit = 0;
 
     contactForm.addEventListener('submit', async (e) => {
       e.preventDefault();
+      const now = Date.now();
+      if (now - lastSubmit < 30000) {
+        alert(currentLang === 'en' ? 'Please wait before sending another message.' : 'Por favor esperá 30 segundos antes de enviar otro mensaje.');
+        return;
+      }
+      lastSubmit = now;
       const sending = currentLang === 'en' ? 'Sending...' : 'Enviando...';
       const original = translations[currentLang]['contact-submit'];
       submitBtn.textContent = sending;
