@@ -22,6 +22,8 @@
     (function(){
       var t = localStorage.getItem('theme') || 'dark';
       if (t === 'dark') document.documentElement.setAttribute('data-theme','dark');
+      var a = localStorage.getItem('accent') || 'orange';
+      if (a === 'violet') document.documentElement.setAttribute('data-accent','violet');
     })();
   </script>
 
@@ -36,6 +38,16 @@
       --border:  rgba(0,0,0,0.08);
       --accent:  #e8572a;
       --accent2: #fff2ee;
+    }
+
+    /* ─── VIOLET ACCENT ─── */
+    [data-accent="violet"] {
+      --accent:  #7C3AED;
+      --accent2: #ede9fe;
+    }
+    [data-theme="dark"][data-accent="violet"] {
+      --accent:  #7C3AED;
+      --accent2: #2e1a5e;
     }
 
     /* ─── DARK MODE ─── */
@@ -271,6 +283,13 @@
       position: relative; overflow: hidden;
     }
     .tool-btn:hover { border-color: var(--dark); color: var(--dark); }
+    #accent-btn { gap: .35rem; padding: 0 .65rem; }
+    .accent-dot {
+      width: 10px; height: 10px; border-radius: 50%;
+      transition: background .3s, box-shadow .3s;
+      flex-shrink: 0;
+    }
+    #accent-btn .accent-dot { background: var(--accent); box-shadow: 0 0 6px var(--accent); }
     .tool-btn svg {
       position: absolute;
       top: 50%; left: 50%;
@@ -1110,6 +1129,9 @@
           <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/>
         </svg>
       </button>
+      <button class="tool-btn" id="accent-btn" aria-label="Cambiar color">
+        <span class="accent-dot"></span>
+      </button>
       <button class="tool-btn" id="lang-btn" aria-label="Cambiar idioma">
         <span id="lang-label">EN</span>
       </button>
@@ -1769,6 +1791,24 @@
       entries.forEach(e => { if (e.isIntersecting) { e.target.classList.add('v'); obs.unobserve(e.target); } });
     }, { threshold: 0.1 });
     document.querySelectorAll('.reveal, .rl, .rr').forEach(el => obs.observe(el));
+
+    /* ── ACCENT COLOR ── */
+    (function() {
+      const btn = document.getElementById('accent-btn');
+      const saved = localStorage.getItem('accent') || 'orange';
+      if (saved === 'violet') document.documentElement.setAttribute('data-accent', 'violet');
+
+      btn.addEventListener('click', () => {
+        const isViolet = document.documentElement.getAttribute('data-accent') === 'violet';
+        if (isViolet) {
+          document.documentElement.removeAttribute('data-accent');
+          localStorage.setItem('accent', 'orange');
+        } else {
+          document.documentElement.setAttribute('data-accent', 'violet');
+          localStorage.setItem('accent', 'violet');
+        }
+      });
+    })();
 
     /* ── DARK MODE ── */
     const themeBtn = document.getElementById('theme-btn');
