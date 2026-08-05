@@ -457,25 +457,41 @@
 
     /* ─── SECTION DIVIDER ─── */
     .section-divider {
-      position: relative; height: 1px; width: 100%;
-      background: linear-gradient(to right, transparent 0%, var(--border) 20%, var(--accent) 50%, var(--border) 80%, transparent 100%);
-      margin: 0;
+      position: relative; height: 16px; width: 100%;
+      display: flex; align-items: center;
+      cursor: crosshair; overflow: visible;
     }
     .section-divider::before {
       content: '';
+      position: absolute; left: 0; right: 0; top: 50%;
+      height: 1px;
+      background: linear-gradient(to right, transparent 0%, var(--border) 20%, var(--accent) 50%, var(--border) 80%, transparent 100%);
+      transition: background .3s;
+    }
+    .section-divider .div-dot {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%, -50%);
       width: 6px; height: 6px; border-radius: 50%;
       background: var(--accent);
       box-shadow: 0 0 12px 4px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.5);
+      transition: box-shadow .2s, width .2s, height .2s;
+      pointer-events: none;
     }
-    .section-divider::after {
-      content: '';
+    .section-divider .div-glow {
       position: absolute; left: 50%; top: 50%;
       transform: translate(-50%, -50%);
       width: 160px; height: 1px;
       background: linear-gradient(to right, transparent, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.6), transparent);
       filter: blur(2px);
+      transition: width .3s, opacity .3s;
+      pointer-events: none;
+    }
+    .section-divider:hover .div-dot {
+      width: 10px; height: 10px;
+      box-shadow: 0 0 20px 8px rgba(var(--accent-r),var(--accent-g),var(--accent-b),.7);
+    }
+    .section-divider:hover .div-glow {
+      width: 320px;
     }
 
     /* ─── FEATURED WORK ─── */
@@ -1172,7 +1188,7 @@
     </div>
   </div>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── FEATURED WORK ─── -->
   <section class="featured-section">
@@ -1197,7 +1213,7 @@
     </div>
   </section>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── STATS ─── -->
   <div class="stats reveal" id="work">
@@ -1219,7 +1235,7 @@
     </div>
   </div>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── CAROUSEL ─── -->
   <section class="carousel-section">
@@ -1353,7 +1369,7 @@
     </div>
   </section>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── ABOUT ─── -->
   <section class="section-wrap" id="about">
@@ -1388,7 +1404,7 @@
     </div>
   </section>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── SERVICES ─── -->
   <section class="section-wrap services-bg" id="services">
@@ -1443,7 +1459,7 @@
     </div>
   </section>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── VIDEO & MOTION ─── -->
   <section class="video-section reveal" id="video">
@@ -1508,7 +1524,7 @@
     </div>
   </section>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── PROCESS ─── -->
   <section class="process-section" id="process">
@@ -1540,7 +1556,7 @@
     </div>
   </section>
 
-  <div class="section-divider" aria-hidden="true"></div>
+  <div class="section-divider" aria-hidden="true"><span class="div-dot"></span><span class="div-glow"></span></div>
 
   <!-- ─── CONTACT ─── -->
   <section id="contact">
@@ -2151,6 +2167,26 @@
         requestAnimationFrame(lerp);
       })();
     })();
+
+    /* ── DIVIDER MOUSE TRACKING ── */
+    document.querySelectorAll('.section-divider').forEach(div => {
+      const dot  = div.querySelector('.div-dot');
+      const glow = div.querySelector('.div-glow');
+      let targetX = 0, currentX = 0;
+
+      div.addEventListener('mousemove', e => {
+        const rect = div.getBoundingClientRect();
+        targetX = e.clientX - rect.left - rect.width / 2;
+      });
+      div.addEventListener('mouseleave', () => { targetX = 0; });
+
+      (function track() {
+        currentX += (targetX - currentX) * .1;
+        if (dot)  dot.style.transform  = `translate(calc(-50% + ${currentX}px), -50%)`;
+        if (glow) glow.style.transform = `translate(calc(-50% + ${currentX * .5}px), -50%)`;
+        requestAnimationFrame(track);
+      })();
+    });
   </script>
 
 </body>
