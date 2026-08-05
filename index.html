@@ -2045,13 +2045,33 @@
         for (let i = 0; i < COUNT; i++) { const p = new Particle(); particles.push(p); }
       }
 
-      function draw() {
+      /* mouse attraction */
+      let mouse = { x: W / 2, y: H / 2 };
+      window.addEventListener('mousemove', e => { mouse.x = e.clientX; mouse.y = e.clientY; });
+
+      function drawWithMouse() {
         ctx.clearRect(0, 0, W, H);
         const dark = isDark();
         const baseAlpha = dark ? .55 : .35;
 
         particles.forEach(p => {
-          p.update();
+          const dx = mouse.x - p.x, dy = mouse.y - p.y;
+          const dist = Math.sqrt(dx * dx + dy * dy);
+          if (dist < 180) {
+            const force = (180 - dist) / 180;
+            p.vx += dx / dist * force * .18;
+            p.vy += dy / dist * force * .18;
+          }
+          /* speed cap */
+          const speed = Math.sqrt(p.vx * p.vx + p.vy * p.vy);
+          if (speed > 2.5) { p.vx = (p.vx / speed) * 2.5; p.vy = (p.vy / speed) * 2.5; }
+          /* friction */
+          p.vx *= .96; p.vy *= .96;
+
+          p.x += p.vx; p.y += p.vy;
+          if (p.x < 0 || p.x > W) p.vx *= -1;
+          if (p.y < 0 || p.y > H) p.vy *= -1;
+
           ctx.beginPath();
           ctx.arc(p.x, p.y, p.r, 0, Math.PI * 2);
           ctx.fillStyle = `rgba(${ACCENT[0]},${ACCENT[1]},${ACCENT[2]},${p.alpha * baseAlpha * 2})`;
@@ -2074,14 +2094,44 @@
             }
           }
         }
-        animId = requestAnimationFrame(draw);
+        animId = requestAnimationFrame(drawWithMouse);
       }
 
       window.addEventListener('resize', () => { resize(); init(); });
-      resize(); init(); draw();
+      resize(); init();
+      cancelAnimationFrame(animId);
+      drawWithMouse();
 
       const observer = new MutationObserver(() => {});
       observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
+    })();
+
+    /* ── AURORA PARALLAX ── */
+    (function() {
+      const blobs = document.querySelectorAll('.aurora-blob');
+      const rings = document.querySelectorAll('.bg-ring');
+      let tx = 0, ty = 0, cx = 0, cy = 0;
+      const depths = [.025, .018, .012, .008];
+      const rDepths = [.01, .007, .005, .008, .004];
+
+      window.addEventListener('mousemove', e => {
+        tx = (e.clientX / window.innerWidth  - .5) * 2;
+        ty = (e.clientY / window.innerHeight - .5) * 2;
+      });
+
+      (function lerp() {
+        cx += (tx - cx) * .06;
+        cy += (ty - cy) * .06;
+        blobs.forEach((b, i) => {
+          const d = depths[i] || .01;
+          b.style.transform = `translate(${cx * d * 120}px, ${cy * d * 120}px)`;
+        });
+        rings.forEach((r, i) => {
+          const d = rDepths[i] || .005;
+          r.style.transform = `translate(${cx * d * 80}px, ${cy * d * 80}px)`;
+        });
+        requestAnimationFrame(lerp);
+      })();
     })();
   </script>
 
