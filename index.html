@@ -4,6 +4,11 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Damdesign — Diego Damian · Diseño Gráfico · Jujuy</title>
+  <meta name="description" content="Soy Diego Damian, diseñador gráfico de Jujuy, Argentina. Especialista en identidad de marca, UX/UI, edición de video y motion graphics para clientes de todo el mundo." />
+  <meta property="og:title" content="Damdesign — Diego Damian · Diseño Gráfico" />
+  <meta property="og:description" content="Identidad de marca, UX/UI, video y motion graphics desde Jujuy para el mundo." />
+  <meta property="og:type" content="website" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🎨</text></svg>" />
   <meta http-equiv="X-Content-Type-Options" content="nosniff" />
   <meta http-equiv="X-Frame-Options" content="DENY" />
   <meta name="referrer" content="strict-origin-when-cross-origin" />
@@ -653,6 +658,12 @@
       transform: scale(1.1);
       box-shadow: 0 0 0 10px rgba(232,87,42,.2);
     }
+    .video-title {
+      position: absolute; bottom: 1rem; left: 1rem; right: 1rem; z-index: 1;
+      font-size: .72rem; font-weight: 700; color: rgba(255,255,255,.85);
+      letter-spacing: .04em; line-height: 1.3;
+      text-shadow: 0 1px 4px rgba(0,0,0,.6);
+    }
     /* video preview inside card */
     .vc-preview {
       position: absolute; inset: 0;
@@ -1205,6 +1216,10 @@
           <span class="skill-tag">Manuales de Marca</span>
           <span class="skill-tag">Adobe Portfolio</span>
         </div>
+        <a href="mailto:damianruedadg@gmail.com?subject=Solicitud%20de%20CV" class="btn-outline" style="margin-top:1.5rem;display:inline-flex;align-items:center;gap:.5rem;" data-i18n="about-cv">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 01-2 2H5a2 2 0 01-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          Descargar CV
+        </a>
       </div>
     </div>
   </section>
@@ -1248,6 +1263,17 @@
         <p data-i18n="service-3-p">Personajes e ilustraciones con identidad propia. Piezas que van más allá de lo funcional y generan una conexión emocional con quien las ve.</p>
       </div>
 
+      <div class="service-card reveal" style="transition-delay:.3s">
+        <span class="service-num">04 /</span>
+        <div class="service-icon">
+          <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round">
+            <polygon points="23 7 16 12 23 17 23 7"/><rect x="1" y="5" width="15" height="14" rx="2"/>
+          </svg>
+        </div>
+        <h3 data-i18n="service-4-title">Video & Motion Graphics</h3>
+        <p data-i18n="service-4-p">Reels, anuncios y motion graphics que detienen el scroll. Edición de video y animación para marcas que necesitan comunicar en movimiento.</p>
+      </div>
+
     </div>
   </section>
 
@@ -1268,6 +1294,7 @@
       <div class="video-card" data-video-src="asset/IP VENTAS DEPTO.mp4">
         <video class="vc-preview" src="asset/IP VENTAS DEPTO.mp4" autoplay muted loop playsinline></video>
         <span class="video-pill" data-i18n="vpill-1">Reel</span>
+        <div class="video-title">IP Ventas Depto</div>
         <div class="video-play">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
         </div>
@@ -1276,6 +1303,7 @@
       <div class="video-card" data-video-src="asset/CIRCU - Reel Cierre.mp4">
         <video class="vc-preview" src="asset/CIRCU - Reel Cierre.mp4" autoplay muted loop playsinline></video>
         <span class="video-pill" data-i18n="vpill-2">Anuncio</span>
+        <div class="video-title">Circu — Reel Cierre</div>
         <div class="video-play">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
         </div>
@@ -1284,6 +1312,7 @@
       <div class="video-card" data-video-src="asset/Circular Info Placa 1_2.mp4">
         <video class="vc-preview" src="asset/Circular Info Placa 1_2.mp4" autoplay muted loop playsinline></video>
         <span class="video-pill" data-i18n="vpill-3">Motion</span>
+        <div class="video-title">Circular Info Placa</div>
         <div class="video-play">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
         </div>
@@ -1292,6 +1321,7 @@
       <div class="video-card" data-video-src="asset/Muskuy v2.mp4">
         <video class="vc-preview" src="asset/Muskuy v2.mp4" autoplay muted loop playsinline></video>
         <span class="video-pill" data-i18n="vpill-4">Edición</span>
+        <div class="video-title">Muskuy</div>
         <div class="video-play">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
         </div>
@@ -1300,6 +1330,7 @@
       <div class="video-card" data-video-src="asset/RDLH Reel - Cierre.mp4">
         <video class="vc-preview" src="asset/RDLH Reel - Cierre.mp4" autoplay muted loop playsinline></video>
         <span class="video-pill" data-i18n="vpill-5">Animación</span>
+        <div class="video-title">RDLH — Reel Cierre</div>
         <div class="video-play">
           <svg width="20" height="20" viewBox="0 0 24 24" fill="white"><path d="M8 5v14l11-7z"/></svg>
         </div>
@@ -1594,9 +1625,9 @@
         'nav-process':      'Proceso',
         'nav-contact':      'Contacto',
         'hero-badge':       'Disponible para proyectos freelance · Jujuy, Argentina',
-        'hero-h1-1':        'Diseño que <em>habla</em>',
-        'hero-h1-2':        'antes de que leas.',
-        'hero-p':           'Soy Diego Damian, diseñador gráfico de Jujuy, Argentina. Identidad de marca, UX/UI, video y animación que conectan y convierten.',
+        'hero-h1-1':        'Diseño gráfico desde <em>Jujuy</em>',
+        'hero-h1-2':        'para el mundo.',
+        'hero-p':           'Soy Diego Damian — branding, UX/UI, video y motion graphics. Construyo marcas con identidad propia y piezas visuales que convierten.',
         'hero-btn-work':    'Ver portafolio ↓',
         'hero-btn-behance': 'Behance ↗',
         'hero-scroll':      'Scroll',
@@ -1626,11 +1657,12 @@
         'card-5-title':     'Independencia y Unidad',
         'card-5-meta':      'Diseño Editorial · Institucional',
         'about-label':      'Sobre mí',
-        'about-title':      'Diseño con propósito, no solo con estética.',
+        'about-title':      'Diseñador del norte argentino trabajando para el mundo.',
         'about-badge':      'años de carrera',
-        'about-p1':         'Soy Diego Damian, diseñador gráfico de San Salvador de Jujuy, Argentina. Trabajo profesionalmente desde 2020 en identidades visuales, diseño UX/UI e ilustración que generan impacto real.',
-        'about-p2':         'Cada proyecto arranca con una pregunta: ¿qué debe sentir la persona que lo ve? Esa respuesta guía cada decisión de color, forma y tipografía.',
+        'about-p1':         'Soy Diego Damian, de San Salvador de Jujuy, Argentina. Desde 2020 trabajo con clientes locales e internacionales en identidad de marca, UX/UI, ilustración, edición de video y motion graphics.',
+        'about-p2':         'Combinar todas esas disciplinas me permite resolver un proyecto de forma integral — desde el logo hasta el reel de lanzamiento. No necesitás contratar a cinco personas.',
         'about-p3':         'Disponible para proyectos freelance y colaboraciones en todo el mundo.',
+        'about-cv':         'Solicitar CV',
         'services-label':   'Servicios',
         'services-title':   'Lo que hago',
         'video-label':      'Video & Motion',
@@ -1647,6 +1679,8 @@
         'service-2-p':      'Interfaces digitales centradas en el usuario. Flujos, wireframes y prototipos que convierten la experiencia en algo natural e intuitivo, como en el proyecto Vidagift.',
         'service-3-title':  'Ilustración & Character Design',
         'service-3-p':      'Personajes e ilustraciones con identidad propia. Piezas que van más allá de lo funcional y generan una conexión emocional con quien las ve.',
+        'service-4-title':  'Video & Motion Graphics',
+        'service-4-p':      'Reels, anuncios y motion graphics que detienen el scroll. Edición de video y animación para marcas que necesitan comunicar en movimiento.',
         'process-label':    'Mi proceso',
         'process-title':    'Cómo trabajo',
         'process-1-title':  'Descubrimiento',
@@ -1678,9 +1712,9 @@
         'nav-process':      'Process',
         'nav-contact':      'Contact',
         'hero-badge':       'Available for freelance projects · Jujuy, Argentina',
-        'hero-h1-1':        'Design that <em>speaks</em>',
-        'hero-h1-2':        'before you read.',
-        'hero-p':           'I\'m Diego Damian, graphic designer from Jujuy, Argentina. Brand identity, UX/UI, video and motion that connect and convert.',
+        'hero-h1-1':        'Graphic design from <em>Jujuy</em>',
+        'hero-h1-2':        'for the world.',
+        'hero-p':           'I\'m Diego Damian — branding, UX/UI, video and motion graphics. I build brands with their own identity and visual pieces that convert.',
         'hero-btn-work':    'View portfolio ↓',
         'hero-btn-behance': 'Behance ↗',
         'hero-scroll':      'Scroll',
@@ -1710,11 +1744,12 @@
         'card-5-title':     'Independence and Unity',
         'card-5-meta':      'Editorial Design · Institutional',
         'about-label':      'About me',
-        'about-title':      'Design with purpose, not just aesthetics.',
+        'about-title':      'Designer from northern Argentina working for the world.',
         'about-badge':      'years of experience',
-        'about-p1':         'I\'m Diego Damian, a graphic designer from San Salvador de Jujuy, Argentina. I\'ve been working professionally since 2020 in visual identities, UX/UI design, and illustration that create real impact.',
-        'about-p2':         'Every project starts with a question: what should the person looking at it feel? That answer drives every decision in color, shape, and typography.',
+        'about-p1':         'I\'m Diego Damian, from San Salvador de Jujuy, Argentina. Since 2020 I\'ve worked with local and international clients on brand identity, UX/UI, illustration, video editing, and motion graphics.',
+        'about-p2':         'Combining all those disciplines lets me solve a project end-to-end — from the logo to the launch reel. You don\'t need to hire five people.',
         'about-p3':         'Available for freelance projects and collaborations worldwide.',
+        'about-cv':         'Request CV',
         'services-label':   'Services',
         'services-title':   'What I do',
         'video-label':      'Video & Motion',
@@ -1731,6 +1766,8 @@
         'service-2-p':      'User-centered digital interfaces. Flows, wireframes, and prototypes that turn the experience into something natural and intuitive, like the Vidagift project.',
         'service-3-title':  'Illustration & Character Design',
         'service-3-p':      'Characters and illustrations with their own personality. Pieces that go beyond function and create an emotional connection with the viewer.',
+        'service-4-title':  'Video & Motion Graphics',
+        'service-4-p':      'Reels, ads and motion graphics that stop the scroll. Video editing and animation for brands that need to communicate in motion.',
         'process-label':    'My process',
         'process-title':    'How I work',
         'process-1-title':  'Discovery',
@@ -1762,7 +1799,7 @@
       currentLang = lang;
       document.documentElement.lang = lang;
       localStorage.setItem('lang', lang);
-      const htmlKeys = new Set(['hero-h1-1','feat-p','contact-title','modal-msg']);
+      const htmlKeys = new Set(['hero-h1-1', 'feat-p', 'contact-title', 'modal-msg']);
       document.querySelectorAll('[data-i18n]').forEach(el => {
         const key = el.getAttribute('data-i18n');
         if (translations[lang][key] === undefined) return;
