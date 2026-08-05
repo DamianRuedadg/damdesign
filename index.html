@@ -115,6 +115,14 @@
     }
     [data-theme="dark"] body::after { opacity: .09; }
 
+    /* dot grid reactivo */
+    #bg-grid {
+      position: fixed; inset: -40px; z-index: 0; pointer-events: none;
+      background-image: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.18) 1px, transparent 1px);
+      background-size: 32px 32px;
+      will-change: transform;
+    }
+
     /* canvas partículas */
     #bg-canvas {
       position: fixed; inset: 0; z-index: 0; pointer-events: none;
@@ -1058,6 +1066,7 @@
 <body class="loading">
 
   <!-- ─── BACKGROUND EFFECTS ─── -->
+  <div id="bg-grid" aria-hidden="true"></div>
   <canvas id="bg-canvas" aria-hidden="true"></canvas>
   <div class="bg-aurora" aria-hidden="true">
     <div class="aurora-blob"></div>
@@ -2144,9 +2153,10 @@
     (function() {
       const blobs = document.querySelectorAll('.aurora-blob');
       const rings = document.querySelectorAll('.bg-ring');
+      const bgGrid = document.getElementById('bg-grid');
       let tx = 0, ty = 0, cx = 0, cy = 0;
-      const depths = [.025, .018, .012, .008];
-      const rDepths = [.01, .007, .005, .008, .004];
+      const depths  = [.06, .045, .03, .018];
+      const rDepths = [.025, .018, .012, .02, .01];
 
       window.addEventListener('mousemove', e => {
         tx = (e.clientX / window.innerWidth  - .5) * 2;
@@ -2157,13 +2167,14 @@
         cx += (tx - cx) * .06;
         cy += (ty - cy) * .06;
         blobs.forEach((b, i) => {
-          const d = depths[i] || .01;
-          b.style.transform = `translate(${cx * d * 120}px, ${cy * d * 120}px)`;
+          const d = depths[i] || .02;
+          b.style.transform = `translate(${cx * d * 180}px, ${cy * d * 180}px)`;
         });
         rings.forEach((r, i) => {
-          const d = rDepths[i] || .005;
-          r.style.transform = `translate(${cx * d * 80}px, ${cy * d * 80}px)`;
+          const d = rDepths[i] || .008;
+          r.style.transform = `translate(${cx * d * 120}px, ${cy * d * 120}px)`;
         });
+        if (bgGrid) bgGrid.style.transform = `translate(${cx * 18}px, ${cy * 18}px)`;
         requestAnimationFrame(lerp);
       })();
     })();
