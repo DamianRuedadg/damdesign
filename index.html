@@ -139,43 +139,18 @@
     .aurora-wrap:nth-child(1) .aurora-blob {
       width: 500px; height: 500px; opacity: .5;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.75) 0%, transparent 70%);
-      animation: blob1 18s ease-in-out infinite;
     }
     .aurora-wrap:nth-child(2) .aurora-blob {
       width: 420px; height: 420px; opacity: .4;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.65) 0%, transparent 70%);
-      animation: blob2 24s ease-in-out infinite;
     }
     .aurora-wrap:nth-child(3) .aurora-blob {
       width: 320px; height: 320px; opacity: .3;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.55) 0%, transparent 65%);
-      animation: blob3 30s ease-in-out infinite;
     }
     .aurora-wrap:nth-child(4) .aurora-blob {
       width: 260px; height: 260px; opacity: .25;
       background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.5) 0%, transparent 65%);
-      animation: blob4 22s ease-in-out infinite;
-    }
-
-    @keyframes blob1 {
-      0%,100% { transform: translate(0px, 0px); }
-      33%      { transform: translate(90px, -70px); }
-      66%      { transform: translate(-50px, 80px); }
-    }
-    @keyframes blob2 {
-      0%,100% { transform: translate(0px, 0px); }
-      33%      { transform: translate(-80px, 60px); }
-      66%      { transform: translate(70px, -90px); }
-    }
-    @keyframes blob3 {
-      0%,100% { transform: translate(0px, 0px); }
-      33%      { transform: translate(60px, 80px); }
-      66%      { transform: translate(-70px, -50px); }
-    }
-    @keyframes blob4 {
-      0%,100% { transform: translate(0px, 0px); }
-      33%      { transform: translate(-60px, -70px); }
-      66%      { transform: translate(80px, 50px); }
     }
 
     [data-theme="dark"] .aurora-wrap:nth-child(1) .aurora-blob { opacity: .22; }
@@ -2158,35 +2133,55 @@
       observer.observe(document.documentElement, { attributes: true, attributeFilter: ['data-theme'] });
     })();
 
-    /* ── MOUSE PARALLAX — wrappers se mueven con mouse, CSS anima los blobs internos ── */
+    /* ── FONDO ANIMADO JS — movimiento autónomo + mouse ── */
     (function(){
       var wraps  = document.querySelectorAll('.aurora-wrap');
       var rings  = document.querySelectorAll('.bg-ring');
       var bgGrid = document.getElementById('bg-grid');
-      var wDepths = [55, 40, 30, 20];
-      var rDepths = [22, 16, 10, 18, 8];
-      var mx=0, my=0, cmx=0, cmy=0;
 
+      /* órbita autónoma de cada blob: [amplitudX, amplitudY, velocidadX, velocidadY, faseX, faseY] */
+      var bOrbit = [
+        [90, 70, 0.0004, 0.0003, 0,    1.5],
+        [75, 85, 0.0003, 0.0005, 3.14, 0  ],
+        [60, 55, 0.0006, 0.0004, 1.0,  2.2],
+        [50, 65, 0.0005, 0.0003, 2.0,  0.8],
+      ];
+      var rOrbit = [
+        [20, 14, 0.0002, 0.00015, 0,   0  ],
+        [14, 20, 0.00015,0.0002,  3.14,0  ],
+        [12, 12, 0.00025,0.0002,  0.5, 1.2],
+        [18, 12, 0.0002, 0.00025, 2.1, 0.8],
+        [10, 16, 0.00022,0.00018, 1.0, 2.5],
+      ];
+
+      var mx=0, my=0, cmx=0, cmy=0;
       document.addEventListener('mousemove', function(e){
         mx = (e.clientX / innerWidth  - 0.5) * 2;
         my = (e.clientY / innerHeight - 0.5) * 2;
       });
 
-      function tick(){
+      function tick(t){
         cmx += (mx - cmx) * 0.06;
         cmy += (my - cmy) * 0.06;
+
         for(var i=0; i<wraps.length; i++){
-          var d = wDepths[i] || 20;
-          wraps[i].style.transform = 'translate('+(cmx*d)+'px,'+(cmy*d)+'px)';
+          var o = bOrbit[i];
+          var bx = Math.sin(t * o[2] + o[4]) * o[0] + cmx * 55;
+          var by = Math.cos(t * o[3] + o[5]) * o[1] + cmy * 55;
+          wraps[i].style.transform = 'translate('+bx+'px,'+by+'px)';
         }
         for(var j=0; j<rings.length; j++){
-          var r = rDepths[j] || 10;
-          rings[j].style.transform = 'translate('+(cmx*r)+'px,'+(cmy*r)+'px)';
+          var r = rOrbit[j];
+          var rx = Math.sin(t * r[2] + r[4]) * r[0] + cmx * 22;
+          var ry = Math.cos(t * r[3] + r[5]) * r[1] + cmy * 22;
+          rings[j].style.transform = 'translate('+rx+'px,'+ry+'px)';
         }
-        if(bgGrid) bgGrid.style.transform = 'translate('+(cmx*18)+'px,'+(cmy*18)+'px)';
+        if(bgGrid){
+          bgGrid.style.transform = 'translate('+(Math.sin(t*0.00015)*15+cmx*18)+'px,'+(Math.cos(t*0.0001)*12+cmy*18)+'px)';
+        }
         requestAnimationFrame(tick);
       }
-      tick();
+      requestAnimationFrame(tick);
     })();
 
     /* ── DIVIDER MOUSE TRACKING ── */
