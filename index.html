@@ -2124,6 +2124,17 @@
       const h1 = document.querySelector('.hero h1');
       if (h1) { h1.style.opacity = '1'; h1.style.transform = 'none'; }
 
+      // guardar contenido y vaciar todas las líneas ANTES de empezar
+      const saved = Array.from(lines).map(line => ({
+        line,
+        nodes: Array.from(line.childNodes).map(n => ({
+          type: n.nodeType === 3 ? 'text' : 'tag',
+          tag: n.nodeName.toLowerCase(),
+          text: n.textContent
+        }))
+      }));
+      lines.forEach(l => { l.innerHTML = ''; });
+
       // cursor parpadeante
       const cursor = document.createElement('span');
       cursor.id = 'tw-cursor';
@@ -2134,18 +2145,11 @@
       document.head.appendChild(style);
 
       function typeLine(lineIdx) {
-        if (lineIdx >= lines.length) {
-          // quitar cursor al terminar
+        if (lineIdx >= saved.length) {
           setTimeout(() => cursor.remove(), 800);
           return;
         }
-        const line = lines[lineIdx];
-        const nodes = Array.from(line.childNodes).map(n => ({
-          type: n.nodeType === 3 ? 'text' : 'tag',
-          tag: n.nodeName.toLowerCase(),
-          text: n.textContent
-        }));
-        line.innerHTML = '';
+        const { line, nodes } = saved[lineIdx];
         line.appendChild(cursor);
         let ni = 0, ci = 0, current = null;
 
