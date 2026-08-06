@@ -2117,37 +2117,55 @@
       loopTrail();
     })();
 
-    /* ── TYPEWRITER HERO — arranca después del hero-in (≈2s loader + 650ms anim) ── */
+    /* ── TYPEWRITER HERO ── */
     setTimeout(function(){
       const lines = document.querySelectorAll('.hero h1 .line > span');
       if (!lines.length) return;
-
-      // Asegurar que h1 sea visible durante el typewriter
       const h1 = document.querySelector('.hero h1');
       if (h1) { h1.style.opacity = '1'; h1.style.transform = 'none'; }
 
-      lines.forEach((line, li) => {
+      // cursor parpadeante
+      const cursor = document.createElement('span');
+      cursor.id = 'tw-cursor';
+      cursor.textContent = '|';
+      cursor.style.cssText = 'display:inline-block;color:var(--accent);animation:twBlink .65s step-end infinite;margin-left:2px;font-weight:300;';
+      const style = document.createElement('style');
+      style.textContent = '@keyframes twBlink{0%,100%{opacity:1}50%{opacity:0}}';
+      document.head.appendChild(style);
+
+      function typeLine(lineIdx) {
+        if (lineIdx >= lines.length) {
+          // quitar cursor al terminar
+          setTimeout(() => cursor.remove(), 800);
+          return;
+        }
+        const line = lines[lineIdx];
         const nodes = Array.from(line.childNodes).map(n => ({
           type: n.nodeType === 3 ? 'text' : 'tag',
           tag: n.nodeName.toLowerCase(),
           text: n.textContent
         }));
         line.innerHTML = '';
+        line.appendChild(cursor);
         let ni = 0, ci = 0, current = null;
+
         function type() {
-          if (ni >= nodes.length) return;
+          if (ni >= nodes.length) {
+            setTimeout(() => typeLine(lineIdx + 1), 200);
+            return;
+          }
           const node = nodes[ni];
           if (!current) {
             current = node.type === 'tag' ? document.createElement(node.tag) : document.createTextNode('');
-            line.appendChild(current);
+            line.insertBefore(current, cursor);
           }
           current.textContent += node.text[ci++];
           if (ci >= node.text.length) { ni++; ci = 0; current = null; }
-          if (ni < nodes.length || (nodes[ni-1] && ci < nodes[ni-1].text.length))
-            setTimeout(type, 40 + Math.random() * 20);
+          setTimeout(type, 70 + Math.random() * 40);
         }
-        setTimeout(type, li * 800);
-      });
+        type();
+      }
+      typeLine(0);
     }, 2100);
 
     /* ── COUNT UP STATS ── */
