@@ -126,50 +126,56 @@
     }
 
     /* aurora blobs */
-    .bg-aurora {
-      position: fixed; inset: 0; z-index: 0; pointer-events: none;
-    }
-    .aurora-wrap {
-      position: absolute; will-change: transform;
-    }
-    .aurora-blob {
-      border-radius: 50%;
-      filter: blur(120px); mix-blend-mode: multiply;
-      animation: auroraFloat var(--dur, 20s) ease-in-out infinite;
-    }
-    @keyframes auroraFloat {
-      0%   { transform: translate(0px,    0px); }
-      25%  { transform: translate(100px, -80px); }
-      50%  { transform: translate(-60px,  90px); }
-      75%  { transform: translate(70px,   50px); }
-      100% { transform: translate(0px,    0px); }
-    }
+    .bg-aurora { position: fixed; inset: 0; z-index: 0; pointer-events: none; }
+    .aurora-wrap { position: absolute; will-change: transform; }
+    .aurora-blob { border-radius: 50%; filter: blur(100px); mix-blend-mode: multiply; }
     [data-theme="dark"] .aurora-blob { mix-blend-mode: screen; }
 
-
-    .aurora-wrap:nth-child(1) { top: -120px; right: -100px; }
-    .aurora-wrap:nth-child(2) { bottom: -100px; left: -100px; }
-    .aurora-wrap:nth-child(3) { top: 40%; right: 10%; }
-    .aurora-wrap:nth-child(4) { top: 20%; left: 30%; }
+    .aurora-wrap:nth-child(1) { top: -150px; right: -80px; }
+    .aurora-wrap:nth-child(2) { bottom: -120px; left: -80px; }
+    .aurora-wrap:nth-child(3) { top: 35%; right: 8%; }
+    .aurora-wrap:nth-child(4) { top: 15%; left: 25%; }
 
     .aurora-wrap:nth-child(1) .aurora-blob {
-      width: 500px; height: 500px; opacity: .55; --dur: 18s;
-      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.7) 0%, rgba(255,160,80,.25) 50%, transparent 70%);
+      width: 500px; height: 500px; opacity: .5;
+      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.75) 0%, transparent 70%);
+      animation: blob1 18s ease-in-out infinite;
     }
     .aurora-wrap:nth-child(2) .aurora-blob {
-      width: 420px; height: 420px; opacity: .45; --dur: 25s;
-      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.65) 0%, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.2) 50%, transparent 70%);
-      animation-delay: -8s;
+      width: 420px; height: 420px; opacity: .4;
+      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.65) 0%, transparent 70%);
+      animation: blob2 24s ease-in-out infinite;
     }
     .aurora-wrap:nth-child(3) .aurora-blob {
-      width: 320px; height: 320px; opacity: .35; --dur: 30s;
-      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.5) 0%, transparent 65%);
-      animation-delay: -15s;
+      width: 320px; height: 320px; opacity: .3;
+      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.55) 0%, transparent 65%);
+      animation: blob3 30s ease-in-out infinite;
     }
     .aurora-wrap:nth-child(4) .aurora-blob {
-      width: 260px; height: 260px; opacity: .3; --dur: 22s;
-      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.45) 0%, transparent 65%);
-      animation-delay: -4s;
+      width: 260px; height: 260px; opacity: .25;
+      background: radial-gradient(circle, rgba(var(--accent-r),var(--accent-g),var(--accent-b),.5) 0%, transparent 65%);
+      animation: blob4 22s ease-in-out infinite;
+    }
+
+    @keyframes blob1 {
+      0%,100% { transform: translate(0px, 0px); }
+      33%      { transform: translate(90px, -70px); }
+      66%      { transform: translate(-50px, 80px); }
+    }
+    @keyframes blob2 {
+      0%,100% { transform: translate(0px, 0px); }
+      33%      { transform: translate(-80px, 60px); }
+      66%      { transform: translate(70px, -90px); }
+    }
+    @keyframes blob3 {
+      0%,100% { transform: translate(0px, 0px); }
+      33%      { transform: translate(60px, 80px); }
+      66%      { transform: translate(-70px, -50px); }
+    }
+    @keyframes blob4 {
+      0%,100% { transform: translate(0px, 0px); }
+      33%      { transform: translate(-60px, -70px); }
+      66%      { transform: translate(80px, 50px); }
     }
 
     [data-theme="dark"] .aurora-wrap:nth-child(1) .aurora-blob { opacity: .22; }
