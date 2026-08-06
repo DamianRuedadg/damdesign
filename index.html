@@ -141,7 +141,10 @@
       transform: translateY(-2px);
     }
 
-    /* ─── CURSOR ─── */
+    /* ─── CURSOR + ESTELA ─── */
+    #cur-trail-canvas {
+      position: fixed; inset: 0; z-index: 9997; pointer-events: none;
+    }
     #cur, #cur-f {
       position: fixed; border-radius: 50%;
       pointer-events: none; z-index: 9999;
@@ -158,7 +161,10 @@
     }
     body.ch #cur { width: 14px; height: 14px; }
     body.ch #cur-f { width: 56px; height: 56px; border-color: rgba(var(--accent-r),var(--accent-g),var(--accent-b),.6); }
-    @media (hover: none) { #cur, #cur-f { display: none; } }
+    @media (hover: none) { #cur, #cur-f, #cur-trail-canvas { display: none; } }
+
+    /* ─── MAGNETIC ─── */
+    .magnetic { transition: transform .3s cubic-bezier(.23,1,.32,1); }
 
     /* ─── REVEAL ─── */
     .reveal { opacity: 0; transform: translateY(28px); transition: opacity .7s ease, transform .7s ease; }
@@ -1003,6 +1009,7 @@
   <div class="scroll-progress-bar" id="scroll-progress"></div>
 
   <!-- ─── CURSOR ─── -->
+  <canvas id="cur-trail-canvas"></canvas>
   <div id="cur"></div>
   <div id="cur-f"></div>
 
@@ -2079,6 +2086,103 @@
         requestAnimationFrame(track);
       })();
     });
+
+    /* ── CURSOR TRAIL ── */
+    (function(){
+      const tc = document.getElementById('cur-trail-canvas');
+      if (!tc) return;
+      const tx = tc.getContext('2d');
+      tc.width = innerWidth; tc.height = innerHeight;
+      window.addEventListener('resize', () => { tc.width = innerWidth; tc.height = innerHeight; });
+      const trail = [];
+      let mx = -200, my = -200;
+      window.addEventListener('mousemove', e => { mx = e.clientX; my = e.clientY; });
+      function loopTrail() {
+        tx.clearRect(0, 0, tc.width, tc.height);
+        trail.push({ x: mx, y: my, a: 1, r: 6 });
+        if (trail.length > 22) trail.shift();
+        const s = getComputedStyle(document.documentElement);
+        const r = s.getPropertyValue('--accent-r').trim() || 232;
+        const g = s.getPropertyValue('--accent-g').trim() || 87;
+        const b = s.getPropertyValue('--accent-b').trim() || 42;
+        trail.forEach((p, i) => {
+          p.a *= 0.88; p.r *= 0.92;
+          tx.beginPath();
+          tx.arc(p.x, p.y, Math.max(p.r, 0.5), 0, Math.PI * 2);
+          tx.fillStyle = `rgba(${r},${g},${b},${p.a * 0.5})`;
+          tx.fill();
+        });
+        requestAnimationFrame(loopTrail);
+      }
+      loopTrail();
+    })();
+
+    /* ── TYPEWRITER HERO ── */
+    (function(){
+      const lines = document.querySelectorAll('.hero h1 .line > span');
+      if (!lines.length) return;
+      lines.forEach((line, li) => {
+        const original = line.innerHTML;
+        line.innerHTML = '';
+        let i = 0;
+        const chars = original.split('');
+        function type() {
+          if (i < chars.length) {
+            line.innerHTML += chars[i++];
+            setTimeout(type, 38 + Math.random() * 20);
+          }
+        }
+        setTimeout(type, 400 + li * 600);
+      });
+    })();
+
+    /* ── COUNT UP STATS ── */
+    (function(){
+      const stats = [
+        { el: null, target: 12, suffix: '+' },
+        { el: null, target: 5,  suffix: '+' },
+        { el: null, target: 4,  suffix: '+' },
+        { el: null, target: 2020, suffix: '—' },
+      ];
+      document.querySelectorAll('.stat-num').forEach((el, i) => {
+        if (stats[i]) stats[i].el = el;
+      });
+      const obs = new IntersectionObserver(entries => {
+        entries.forEach(entry => {
+          if (!entry.isIntersecting) return;
+          const idx = Array.from(document.querySelectorAll('.stat-num')).indexOf(entry.target);
+          const s = stats[idx];
+          if (!s || !s.el) return;
+          obs.unobserve(entry.target);
+          const duration = s.target === 2020 ? 1800 : 1200;
+          const start = s.target === 2020 ? 1990 : 0;
+          const startTime = performance.now();
+          function update(now) {
+            const p = Math.min((now - startTime) / duration, 1);
+            const ease = 1 - Math.pow(1 - p, 3);
+            const val = Math.round(start + (s.target - start) * ease);
+            s.el.innerHTML = `${val}<span class="accent">${s.suffix}</span>`;
+            if (p < 1) requestAnimationFrame(update);
+          }
+          requestAnimationFrame(update);
+        });
+      }, { threshold: 0.5 });
+      document.querySelectorAll('.stat-num').forEach(el => obs.observe(el));
+    })();
+
+    /* ── MAGNETIC BUTTONS ── */
+    (function(){
+      document.querySelectorAll('.btn-primary, .btn-outline, .nav-cta').forEach(btn => {
+        btn.classList.add('magnetic');
+        btn.addEventListener('mousemove', e => {
+          const r = btn.getBoundingClientRect();
+          const dx = e.clientX - (r.left + r.width  / 2);
+          const dy = e.clientY - (r.top  + r.height / 2);
+          btn.style.transform = `translate(${dx * 0.25}px, ${dy * 0.25}px)`;
+        });
+        btn.addEventListener('mouseleave', () => { btn.style.transform = ''; });
+      });
+    })();
 
     /* ── LETTER HOVER COLOR ── */
     (function(){
