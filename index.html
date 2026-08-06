@@ -2117,45 +2117,38 @@
       loopTrail();
     })();
 
-    /* ── TYPEWRITER HERO ── */
-    (function(){
+    /* ── TYPEWRITER HERO — arranca después del hero-in (≈2s loader + 650ms anim) ── */
+    setTimeout(function(){
       const lines = document.querySelectorAll('.hero h1 .line > span');
       if (!lines.length) return;
+
+      // Asegurar que h1 sea visible durante el typewriter
+      const h1 = document.querySelector('.hero h1');
+      if (h1) { h1.style.opacity = '1'; h1.style.transform = 'none'; }
+
       lines.forEach((line, li) => {
-        // Extraer texto plano respetando nodos (em, text)
         const nodes = Array.from(line.childNodes).map(n => ({
           type: n.nodeType === 3 ? 'text' : 'tag',
           tag: n.nodeName.toLowerCase(),
           text: n.textContent
         }));
         line.innerHTML = '';
-        let ni = 0, ci = 0;
-        let current = null;
-
+        let ni = 0, ci = 0, current = null;
         function type() {
           if (ni >= nodes.length) return;
           const node = nodes[ni];
           if (!current) {
-            if (node.type === 'tag') {
-              current = document.createElement(node.tag);
-              line.appendChild(current);
-            } else {
-              current = document.createTextNode('');
-              line.appendChild(current);
-            }
+            current = node.type === 'tag' ? document.createElement(node.tag) : document.createTextNode('');
+            line.appendChild(current);
           }
-          if (ci < node.text.length) {
-            if (node.type === 'tag') current.textContent += node.text[ci];
-            else current.textContent += node.text[ci];
-            ci++;
-          } else {
-            ni++; ci = 0; current = null;
-          }
-          if (ni < nodes.length) setTimeout(type, 42 + Math.random() * 22);
+          current.textContent += node.text[ci++];
+          if (ci >= node.text.length) { ni++; ci = 0; current = null; }
+          if (ni < nodes.length || (nodes[ni-1] && ci < nodes[ni-1].text.length))
+            setTimeout(type, 40 + Math.random() * 20);
         }
-        setTimeout(type, 300 + li * 700);
+        setTimeout(type, li * 800);
       });
-    })();
+    }, 2100);
 
     /* ── COUNT UP STATS ── */
     (function(){
