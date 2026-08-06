@@ -2122,17 +2122,38 @@
       const lines = document.querySelectorAll('.hero h1 .line > span');
       if (!lines.length) return;
       lines.forEach((line, li) => {
-        const original = line.innerHTML;
+        // Extraer texto plano respetando nodos (em, text)
+        const nodes = Array.from(line.childNodes).map(n => ({
+          type: n.nodeType === 3 ? 'text' : 'tag',
+          tag: n.nodeName.toLowerCase(),
+          text: n.textContent
+        }));
         line.innerHTML = '';
-        let i = 0;
-        const chars = original.split('');
+        let ni = 0, ci = 0;
+        let current = null;
+
         function type() {
-          if (i < chars.length) {
-            line.innerHTML += chars[i++];
-            setTimeout(type, 38 + Math.random() * 20);
+          if (ni >= nodes.length) return;
+          const node = nodes[ni];
+          if (!current) {
+            if (node.type === 'tag') {
+              current = document.createElement(node.tag);
+              line.appendChild(current);
+            } else {
+              current = document.createTextNode('');
+              line.appendChild(current);
+            }
           }
+          if (ci < node.text.length) {
+            if (node.type === 'tag') current.textContent += node.text[ci];
+            else current.textContent += node.text[ci];
+            ci++;
+          } else {
+            ni++; ci = 0; current = null;
+          }
+          if (ni < nodes.length) setTimeout(type, 42 + Math.random() * 22);
         }
-        setTimeout(type, 400 + li * 600);
+        setTimeout(type, 300 + li * 700);
       });
     })();
 
